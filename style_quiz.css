@@ -55,7 +55,7 @@ button:hover {
 #quiz-container {
   margin-top: 20px;
   width: 100%;
-  max-width: 600px;
+  max-width: 1000px;
 }
 
 #result {
@@ -75,6 +75,7 @@ button:hover {
   padding: 20px;
   margin: 10px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .quiz h3 {
