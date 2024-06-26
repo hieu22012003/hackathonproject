@@ -9,14 +9,13 @@
 <body>
   <h1>Gemini API Integration</h1>
   <!-- Input -->
-  <textarea id="prompt" placeholder="Enter your prompt" style="width: 100%; max-width: 600px; padding: 10px;"></textarea>
+  <textarea id="prompt" placeholder="Hãy nhập chủ đề mà bạn muốn" style="width: 100%; max-width: 600px; padding: 10px;"></textarea>
   <span>
     <button id="submit" style="padding: 10px; margin-top: 10px;">Submit</button>
 
     <button id="get" style="padding: 10px; margin-top: 10px;">Get</button>
   </span>
   
-  <div id="result">Result will be displayed here...</div>
   <script type="importmap">
     {
       "imports": {
@@ -41,21 +40,23 @@
 
     let text;   
     async function run() {
-      const prompt = `Tạo ra 5 câu hỏi quiz với 4 đáp án khả thi mỗi câu, có chủ đề là: ${document.getElementById('prompt').value}. Hãy chắc chắn rằng mỗi câu sẽ chỉ có 1 đáp án đúng. Cấu trúc nó sẽ nên như này: 
+      const prompt = `Tạo ra 10 câu hỏi quiz với 4 đáp án khả thi mỗi câu, có chủ đề là: ${document.getElementById('prompt').value}. Hãy chắc chắn rằng mỗi câu sẽ chỉ có 1 đáp án đúng. Cấu trúc nó sẽ nên như này: 
       [
         { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
         { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
         { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
         { question: "Câu hỏi 4", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 5", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] }
+        { question: "Câu hỏi 5", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+        { question: "Câu hỏi 6", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+        { question: "Câu hỏi 7", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+        { question: "Câu hỏi 8", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+        { question: "Câu hỏi 9", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+        { question: "Câu hỏi 10", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] }
       ];`;
         try { 
         const result = await model.generateContent(prompt);
         const response = await result.response;
         text = await response.text();
-
-        const resultElement = document.getElementById("result");
-        resultElement.textContent = text;
         } catch (error) {
         console.error("Error generating content:", error);
         }
