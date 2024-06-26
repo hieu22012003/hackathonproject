@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Generation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    #result {
+      white-space: pre-wrap;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+    .quiz {
+        margin-bottom: 20px;
+    }
+    .question {
+        font-weight: bold;
+    }
+    #prompt {
+      font-family: Arial, sans-serif;
+      resize: auto; /* Enable resizing for expandability */
+      overflow-y: auto; /* Enable vertical scrollbar */
+      min-height: 60px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px; /* Add rounded corners for a more polished look */
+    }
+    .answers {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-left: 20px;
+    }
+    .answer-item {
+        display: flex;
+        align-items: center;
+    }
+    .correct-text {
+        color: green;
+        margin-left: 100px; /* Khoảng cách giữa đáp án và chữ Correct! */
+    }
+
+    .incorrect-text {
+        color: red;
+        margin-left: 100px; /* Khoảng cách giữa đáp án và chữ Wrong! */
+    }
+  </style>
+</head>
+<body>
+  <h1>Gemini API Integration</h1>
+  <!-- Input -->
+  <textarea id="prompt" placeholder="Enter your prompt" style="width: 100%; max-width: 600px; padding: 10px;"></textarea>
+  <span>
+    <button id="submit" style="padding: 10px; margin-top: 10px;">Submit</button>
+
+    <button id="get" style="padding: 10px; margin-top: 10px;">Get</button>
+  </span>
+  
+  <div id="result">Result will be displayed here...</div>
+  <script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+  </script>
+
+  <!-- Script module để nhập và khởi tạo mô hình GenerativeAI -->
+  <div id="quiz-container"></div>
+  <script type="module">
+    import { GoogleGenerativeAI } from "@google/generative-ai";
+
+    const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs"; 
+
+    const genAI = new GoogleGenerativeAI(API_KEY);
+
+    let model;
+    (async () => {
+        model = await genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    })();
+
+    let text;   
+    async function run() {
+      const prompt = `Tạo ra 5 câu hỏi quiz với 4 đáp án khả thi mỗi câu, có chủ đề là: ${document.getElementById('prompt').value}. Hãy chắc chắn rằng mỗi câu sẽ chỉ có 1 đáp án đúng. Cấu trúc nó sẽ nên như này: 
+      [
+        { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+        { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+        { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+        { question: "Câu hỏi 4", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+        { question: "Câu hỏi 5", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] }
+      ];`;
+        try { 
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        text = await response.text();
+
+        const resultElement = document.getElementById("result");
+        resultElement.textContent = text;
+        } catch (error) {
+        console.error("Error generating content:", error);
+        }
+        console.log(prompt);
+    }
+
+    let quizArray; // Biến lưu trữ dữ liệu câu hỏi
+    let jsonDataLoaded = false; // Biến cờ để theo dõi xem dữ liệu đã được tải hay chưa
+
+    function get() {
+        const stringtext = text.toString();
+        console.log(stringtext);
+        let jsonData = cleanJsonString(stringtext);
+        if (jsonData) {
+            quizArray = JSON.parse(jsonData);
+            console.log(quizArray);
+            console.log(typeof quizArray);
+            renderQuiz(quizArray);
+        } else {
+            console.error("Failed to clean JSON string");
+        }
+    }
+
+    function renderQuiz(quizData) {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = ''; // Clear previous quiz content
+        quizData.forEach((quiz, quizIndex) => {
+            const quizDiv = document.createElement('div');
+            quizDiv.classList.add('quiz');
+
+            const quizTitle = document.createElement('h3');
+            quizTitle.textContent = `Question ${quizIndex + 1}: ${quiz.question}`;
+            quizDiv.appendChild(quizTitle);
+
+            const answersDiv = document.createElement('div');
+            answersDiv.classList.add('answers');
+
+            quiz.answers.forEach((answer, answerIndex) => {
+                const answerLabel = document.createElement('label');
+                answerLabel.classList.add('answer-item');
+
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `quiz${quizIndex}_answer`;
+                radio.value = answerIndex;
+
+                const answerText = document.createElement('span');
+                answerText.textContent = answer.text;
+                answerLabel.appendChild(radio);
+                answerLabel.appendChild(answerText);
+
+                const resultText = document.createElement('span');
+                resultText.classList.add('result-text');
+                answerLabel.appendChild(resultText);
+
+                radio.addEventListener('change', () => {
+                    const allLabels = answersDiv.querySelectorAll('label');
+                    allLabels.forEach(label => {
+                        const resultSpan = label.querySelector('.result-text');
+                        if (label === answerLabel) {
+                            if (answer.correct) {
+                                resultSpan.textContent = 'Correct!';
+                                resultSpan.classList.add('correct-text');
+                            } else {
+                                resultSpan.textContent = 'Wrong!';
+                                resultSpan.classList.add('incorrect-text');
+                            }
+                        } else {
+                            resultSpan.textContent = '';
+                            resultSpan.classList.remove('correct-text', 'incorrect-text');
+                        }
+                    });
+                });
+
+                answersDiv.appendChild(answerLabel);
+            });
+
+            quizDiv.appendChild(answersDiv);
+            container.appendChild(quizDiv);
+        });
+    }
+    function cleanJsonString(json) {
+        console.log('Original JSON:', json);
+        json = json.replace(/```json/g, '').replace(/```/g, '').trim();
+        console.log('Cleaned JSON:', json);
+        try {
+            let parsedJson = JSON.parse(json);
+            return JSON.stringify(parsedJson, null, 2);
+        } catch (e) {
+            console.error("Invalid JSON string", e);
+            return null;
+        }
+    }
+
+    document.getElementById('get').addEventListener('click', get);
+
+    document.getElementById('submit').addEventListener('click', run);
+  </script>
+</body>
+</html>
