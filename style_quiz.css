@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  #result {
+    white-space: pre-wrap;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+  }
+  .quiz {
+      margin-bottom: 20px;
+  }
+  .question {
+      font-weight: bold;
+  }
+  #prompt {
+    font-family: Arial, sans-serif;
+    resize: auto; /* Enable resizing for expandability */
+    overflow-y: auto; /* Enable vertical scrollbar */
+    min-height: 60px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px; /* Add rounded corners for a more polished look */
+  }
+  .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-left: 20px;
+  }
+  .answer-item {
+      display: flex;
+      align-items: center;
+  }
+  .correct-text {
+      color: green;
+      margin-left: 100px; /* Khoảng cách giữa đáp án và chữ Correct! */
+  }
+
+  .incorrect-text {
+      color: red;
+      margin-left: 100px; /* Khoảng cách giữa đáp án và chữ Wrong! */
+  }
