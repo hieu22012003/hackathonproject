@@ -4,16 +4,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz Generation</title>
-  <link rel="stylesheet" href="style_quiz.css">
+  <link rel="stylesheet" href="style_quiz copy.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-  <h1>Quiz Generate</h1>
-  <textarea id="prompt" placeholder="Hãy nhập chủ đề mà bạn muốn"></textarea>
-  <div style="text-align: center;">
-    <button id="submit">Submit</button>
-    <button id="get">Get</button>
-  </div>
-  
+    <div class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="GAE Logo">
+            <span>GAE</span>
+        </div>
+        <ul>
+            <li><a href="#"><i class="material-icons">home</i> Home</a></li>
+            <li><a href="#"><i class="material-icons">info</i> About</a></li>
+            <li><a href="#"><i class="material-icons">book</i> Courses</a></li>
+            <li><a href="#"><i class="material-icons">group</i> Community</a></li>
+            <li><a href="#"><i class="material-icons">email</i> Contact</a></li>
+        </ul>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="login-buttons">
+            <a href="#" class="generate-button"><i class="material-icons">sparkles</i> Generate</a>
+        </div>
+    </div> 
+
+    <h1>Quiz Generate</h1>
+    <textarea id="prompt" placeholder="Hãy nhập chủ đề mà bạn muốn"></textarea>
+    <div style="text-align: center;" id="container">
+        <label for="num-questions">Max Questions:</label>
+        <select id="num-questions">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+            <option value="40">40</option>
+            <option value="45">45</option>
+            <option value="50">50</option>
+        </select>
+        <div style="text-align: center;">
+            <button id="submit">Submit</button>
+            <button id="get">Get</button>
+        </div>
+        <div class="loader" id="loading">
+            Ready!
+        </div>
+    </div>
+    
   <script type="importmap">
     {
       "imports": {
@@ -38,25 +77,28 @@
 
     let text;   
     async function run() {
-      const prompt = `Tạo ra 10 câu hỏi quiz với 4 đáp án khả thi mỗi câu, có chủ đề là: ${document.getElementById('prompt').value}. Hãy chắc chắn rằng mỗi câu sẽ chỉ có 1 đáp án đúng. Cấu trúc nó sẽ nên như này: 
-      [
-        { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 4", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 5", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 6", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 7", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 8", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 9", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 10", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] }
-      ];`;
+        document.getElementById('loading').innerHTML = `
+            <span>Loading...</span>
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+        `;
+
+        const numQuestions = document.getElementById('num-questions').value;
+        const prompt = `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có chủ đề là: ${document.getElementById('prompt').value}. Hãy chắc chắn rằng mỗi câu sẽ chỉ có 1 đáp án đúng. Cấu trúc nó sẽ nên như này: 
+        [
+          { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+          { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+          { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+        ];`;
+
         try { 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        text = await response.text();
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            text = await response.text();
+            document.getElementById('loading').innerHTML = "Done!";
         } catch (error) {
-        console.error("Error generating content:", error);
+            console.error("Error generating content:", error);
         }
         console.log(prompt);
     }
@@ -72,6 +114,9 @@
             quizArray = JSON.parse(jsonData);
             console.log(quizArray);
             console.log(typeof quizArray);
+            if (quizArray.length != document.getElementById('num-questions').value) {
+                console.error("The generated quiz does not contain the correct number of questions.");
+            }
             renderQuiz(quizArray);
         } else {
             console.error("Failed to clean JSON string");
@@ -136,6 +181,7 @@
             container.appendChild(quizDiv);
         });
     }
+
     function cleanJsonString(json) {
         console.log('Original JSON:', json);
         json = json.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -152,13 +198,16 @@
     document.getElementById('get').addEventListener('click', get);
 
     document.getElementById('submit').addEventListener('click', run);
-    
+
     document.getElementById('prompt').addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
-            event.preventDefault(); // Ngăn chặn hành động mặc định của Enter (tạo dòng mới)
-            document.getElementById('submit').click(); // Kích hoạt nút "Submit"
+            event.preventDefault();
+            document.getElementById('submit').click();
         }
     });
   </script>
+  <div class="footer">
+    <p>&copy; 2024 GAE. All rights reserved.</p>
+</div>
 </body>
 </html>
