@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Generation</title>
-  <link rel="stylesheet" href="style_quiz copy.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Generation</title>
+    <link rel="stylesheet" href="style_quiz.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+
 <body>
     <div class="navbar">
         <div class="logo">
-            <img src="logo.png" alt="GAE Logo">
-            <span>GAE</span>
+            <img src="images/logo.png" alt="GAE Logo">
+            <!-- <span>GAE</span> -->
         </div>
         <ul>
-            <li><a href="#"><i class="material-icons">home</i> Home</a></li>
+            <li><a href="index.html"><i class="material-icons">home</i> Home</a></li>
             <li><a href="#"><i class="material-icons">info</i> About</a></li>
             <li><a href="#"><i class="material-icons">book</i> Courses</a></li>
             <li><a href="#"><i class="material-icons">group</i> Community</a></li>
@@ -24,9 +26,9 @@
             <input type="text" placeholder="Search...">
         </div>
         <div class="login-buttons">
-            <a href="#" class="generate-button"><i class="material-icons">sparkles</i> Generate</a>
+            <a href="quiz.html" class="generate-button"><i class="material-icons">sparkles</i> Generate</a>
         </div>
-    </div> 
+    </div>
 
     <h1>Quiz Generate</h1>
     <textarea id="prompt" placeholder="Hãy nhập chủ đề mà bạn muốn"></textarea>
@@ -52,8 +54,8 @@
             Ready!
         </div>
     </div>
-    
-  <script type="importmap">
+
+    <script type="importmap">
     {
       "imports": {
         "@google/generative-ai": "https://esm.run/@google/generative-ai"
@@ -61,153 +63,155 @@
     }
   </script>
 
-  <!-- Script module để nhập và khởi tạo mô hình GenerativeAI -->
-  <div id="quiz-container"></div>
-  <script type="module">
-    import { GoogleGenerativeAI } from "@google/generative-ai";
+    <!-- Script module để nhập và khởi tạo mô hình GenerativeAI -->
+    <div id="quiz-container"></div>
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
 
-    const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs"; 
+        // const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs";
+        const API_KEY = "AIzaSyBF01fnqmzq8Kr6WH5l2A0TqEfCgiBY3nc";
 
-    const genAI = new GoogleGenerativeAI(API_KEY);
+        const genAI = new GoogleGenerativeAI(API_KEY);
 
-    let model;
-    (async () => {
-        model = await genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    })();
+        let model;
+        (async () => {
+            model = await genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        })();
 
-    let text;   
-    async function run() {
-        document.getElementById('loading').innerHTML = `
+        let text;
+        async function run() {
+            document.getElementById('loading').innerHTML = `
             <span>Loading...</span>
             <span class="dot">.</span>
             <span class="dot">.</span>
             <span class="dot">.</span>
         `;
 
-        const numQuestions = document.getElementById('num-questions').value;
-        const prompt = `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có chủ đề là: ${document.getElementById('prompt').value}. Hãy chắc chắn rằng mỗi câu sẽ chỉ có 1 đáp án đúng. Cấu trúc nó sẽ nên như này: 
+            const numQuestions = document.getElementById('num-questions').value;
+            const prompt = `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có chủ đề là: ${document.getElementById('prompt').value}. Hãy chắc chắn rằng mỗi câu sẽ chỉ có 1 đáp án đúng và ngẫu nhiên trong 4 câu trả lời. Cấu trúc nó sẽ nên như này: 
         [
-          { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-          { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-          { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
+          { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] },
+          { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] },
+          { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] },
         ];`;
 
-        try { 
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            text = await response.text();
-            document.getElementById('loading').innerHTML = "Done!";
-        } catch (error) {
-            console.error("Error generating content:", error);
-        }
-        console.log(prompt);
-    }
-
-    let quizArray; // Biến lưu trữ dữ liệu câu hỏi
-    let jsonDataLoaded = false; // Biến cờ để theo dõi xem dữ liệu đã được tải hay chưa
-
-    function get() {
-        const stringtext = text.toString();
-        console.log(stringtext);
-        let jsonData = cleanJsonString(stringtext);
-        if (jsonData) {
-            quizArray = JSON.parse(jsonData);
-            console.log(quizArray);
-            console.log(typeof quizArray);
-            if (quizArray.length != document.getElementById('num-questions').value) {
-                console.error("The generated quiz does not contain the correct number of questions.");
+            try {
+                const result = await model.generateContentStream(prompt);
+                const response = await result.response;
+                text = await response.text();
+                document.getElementById('loading').innerHTML = "Done!";
+            } catch (error) {
+                console.error("Error generating content:", error);
             }
-            renderQuiz(quizArray);
-        } else {
-            console.error("Failed to clean JSON string");
+            console.log(prompt);
         }
-    }
 
-    function renderQuiz(quizData) {
-        const container = document.getElementById('quiz-container');
-        container.innerHTML = ''; // Clear previous quiz content
-        quizData.forEach((quiz, quizIndex) => {
-            const quizDiv = document.createElement('div');
-            quizDiv.classList.add('quiz');
+        let quizArray; // Biến lưu trữ dữ liệu câu hỏi
+        let jsonDataLoaded = false; // Biến cờ để theo dõi xem dữ liệu đã được tải hay chưa
 
-            const quizTitle = document.createElement('h3');
-            quizTitle.textContent = `Question ${quizIndex + 1}: ${quiz.question}`;
-            quizDiv.appendChild(quizTitle);
+        function get() {
+            const stringtext = text.toString();
+            console.log(stringtext);
+            let jsonData = cleanJsonString(stringtext);
+            if (jsonData) {
+                quizArray = JSON.parse(jsonData);
+                console.log(quizArray);
+                console.log(typeof quizArray);
+                if (quizArray.length != document.getElementById('num-questions').value) {
+                    console.error("The generated quiz does not contain the correct number of questions.");
+                }
+                renderQuiz(quizArray);
+            } else {
+                console.error("Failed to clean JSON string");
+            }
+        }
 
-            const answersDiv = document.createElement('div');
-            answersDiv.classList.add('answers');
+        function renderQuiz(quizData) {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = ''; // Clear previous quiz content
+            quizData.forEach((quiz, quizIndex) => {
+                const quizDiv = document.createElement('div');
+                quizDiv.classList.add('quiz');
 
-            quiz.answers.forEach((answer, answerIndex) => {
-                const answerLabel = document.createElement('label');
-                answerLabel.classList.add('answer-item');
+                const quizTitle = document.createElement('h3');
+                quizTitle.textContent = `Question ${quizIndex + 1}: ${quiz.question}`;
+                quizDiv.appendChild(quizTitle);
 
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = `quiz${quizIndex}_answer`;
-                radio.value = answerIndex;
+                const answersDiv = document.createElement('div');
+                answersDiv.classList.add('answers');
 
-                const answerText = document.createElement('span');
-                answerText.textContent = answer.text;
-                answerLabel.appendChild(radio);
-                answerLabel.appendChild(answerText);
+                quiz.answers.forEach((answer, answerIndex) => {
+                    const answerLabel = document.createElement('label');
+                    answerLabel.classList.add('answer-item');
 
-                const resultText = document.createElement('span');
-                resultText.classList.add('result-text');
-                answerLabel.appendChild(resultText);
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `quiz${quizIndex}_answer`;
+                    radio.value = answerIndex;
 
-                radio.addEventListener('change', () => {
-                    const allLabels = answersDiv.querySelectorAll('label');
-                    allLabels.forEach(label => {
-                        const resultSpan = label.querySelector('.result-text');
-                        if (label === answerLabel) {
-                            if (answer.correct) {
-                                resultSpan.textContent = 'Correct!';
-                                resultSpan.classList.add('correct-text');
+                    const answerText = document.createElement('span');
+                    answerText.textContent = answer.text;
+                    answerLabel.appendChild(radio);
+                    answerLabel.appendChild(answerText);
+
+                    const resultText = document.createElement('span');
+                    resultText.classList.add('result-text');
+                    answerLabel.appendChild(resultText);
+
+                    radio.addEventListener('change', () => {
+                        const allLabels = answersDiv.querySelectorAll('label');
+                        allLabels.forEach(label => {
+                            const resultSpan = label.querySelector('.result-text');
+                            if (label === answerLabel) {
+                                if (answer.correct) {
+                                    resultSpan.textContent = 'Correct!';
+                                    resultSpan.classList.add('correct-text');
+                                } else {
+                                    resultSpan.textContent = 'Wrong!';
+                                    resultSpan.classList.add('incorrect-text');
+                                }
                             } else {
-                                resultSpan.textContent = 'Wrong!';
-                                resultSpan.classList.add('incorrect-text');
+                                resultSpan.textContent = '';
+                                resultSpan.classList.remove('correct-text', 'incorrect-text');
                             }
-                        } else {
-                            resultSpan.textContent = '';
-                            resultSpan.classList.remove('correct-text', 'incorrect-text');
-                        }
+                        });
                     });
+
+                    answersDiv.appendChild(answerLabel);
                 });
 
-                answersDiv.appendChild(answerLabel);
+                quizDiv.appendChild(answersDiv);
+                container.appendChild(quizDiv);
             });
+        }
 
-            quizDiv.appendChild(answersDiv);
-            container.appendChild(quizDiv);
+        function cleanJsonString(json) {
+            console.log('Original JSON:', json);
+            json = json.replace(/```json/g, '').replace(/```/g, '').trim();
+            console.log('Cleaned JSON:', json);
+            try {
+                let parsedJson = JSON.parse(json);
+                return JSON.stringify(parsedJson, null, 2);
+            } catch (e) {
+                console.error("Invalid JSON string", e);
+                return null;
+            }
+        }
+
+        document.getElementById('get').addEventListener('click', get);
+
+        document.getElementById('submit').addEventListener('click', run);
+
+        document.getElementById('prompt').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('submit').click();
+            }
         });
-    }
-
-    function cleanJsonString(json) {
-        console.log('Original JSON:', json);
-        json = json.replace(/```json/g, '').replace(/```/g, '').trim();
-        console.log('Cleaned JSON:', json);
-        try {
-            let parsedJson = JSON.parse(json);
-            return JSON.stringify(parsedJson, null, 2);
-        } catch (e) {
-            console.error("Invalid JSON string", e);
-            return null;
-        }
-    }
-
-    document.getElementById('get').addEventListener('click', get);
-
-    document.getElementById('submit').addEventListener('click', run);
-
-    document.getElementById('prompt').addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            document.getElementById('submit').click();
-        }
-    });
-  </script>
-  <div class="footer">
-    <p>&copy; 2024 GAE. All rights reserved.</p>
-</div>
+    </script>
+    <div class="footer">
+        <p>&copy; 2024 GAE. All rights reserved.</p>
+    </div>
 </body>
+
 </html>
