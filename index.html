@@ -7,7 +7,6 @@
     <title>GAE Interface</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="style_index.css">
-    
 </head>
 
 <body>
@@ -88,6 +87,7 @@
         <div class="timer" id="timer">25:00</div>
         <button class="timer-button" id="start-button" onclick="startTimer()">START</button>
     </div>
+    <button class="show-timer-button" onclick="toggleTimer()">Hiển thị đồng hồ</button>
 
     <script>
         let timer;
@@ -190,6 +190,14 @@
                 // Stop moving when mouse button is released
                 document.onmouseup = null;
                 document.onmousemove = null;
+            }
+        }
+        function toggleTimer() {
+            const timer = document.getElementById('timer-container');
+            if (timer.style.display === 'none') {
+                timer.style.display = 'block';
+            } else {
+                timer.style.display = 'none';
             }
         }
     </script>
