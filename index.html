@@ -40,7 +40,6 @@
         </ul>
     </div>
 
-
     <!-- MAIN -->
     <div class="main-content">
         <div class="hero">
@@ -84,8 +83,6 @@
         <button class="timer-button" id="start-button" onclick="startTimer()">BẮT ĐẦU</button>
         <div class="resizer" id="resizer"></div>
     </div>
-    @REM <button class="show-timer-button" onclick="toggleTimer()">Hiển thị đồng hồ</button>
-
 
     <script>
         let timer;
@@ -195,15 +192,6 @@
             document.onmouseup = null;
             document.onmousemove = null;
         }
-         
-        @REM function toggleTimer() {
-        @REM     const timer = document.getElementById('timer-container');
-        @REM     if (timer.style.display === 'none') {
-        @REM         timer.style.display = 'block';
-        @REM     } else {
-        @REM         timer.style.display = 'none';
-        @REM     }
-        @REM }    
     </script>
 </body>
 
