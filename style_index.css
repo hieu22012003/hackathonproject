@@ -261,60 +261,66 @@ body {
     transform: scale(1.1); /* Slightly increase size on hover */
 }
 /* Additional styles for the timer */
+/* Timer Styles */
 .timer-container {
-    text-align: center;
-    padding: 20px;
-    background-color: #4CAF50;
-    color: white;
-    font-family: Arial, sans-serif;
     position: fixed;
     bottom: 20px;
     right: 20px;
-    cursor: move;
+    width: 300px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    cursor: grab;
+    resize: both;
+    overflow: hidden;
     z-index: 1000;
 }
 
+.pomodoro-bg {
+    background: url('/images/pomodoro-bg.jpg') no-repeat center center/cover;
+}
+
+.short-break-bg {
+    background: #7ae3c3;
+}
+
 .timer {
-    font-size: 80px;
-    margin: 20px 0;
-}
-
-.timer-button {
-    padding: 10px 20px;
-    font-size: 20px;
-    background-color: white;
-    color: #4CAF50;
-    border: none;
-    cursor: pointer;
-}
-
-.timer-button:hover {
-    background-color: #ffb3b3;
-}
-
-.session-buttons {
-    display: flex;
-    justify-content: center;
+    font-size: 48px;
     margin-bottom: 20px;
 }
 
-.session-button {
-    background-color: #357038;
+.timer-button {
+    background: #00bcd4;
     color: white;
     border: none;
     padding: 10px 20px;
-    margin: 0 5px;
+    font-size: 16px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
-.session-button:hover {
-    background-color: #163817;
+.timer-button:hover {
+    background: #0097a7;
 }
 
-.session-button.active {
-    background-color: #0d5c0f;
+.resizer {
+    width: 10px;
+    height: 10px;
+    background: #298da9;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: se-resize;
 }
-.show-timer-button {
+
+/* .show-timer-button {
     position: fixed;
     bottom: 20px;
     left: 20px;
@@ -328,4 +334,4 @@ body {
 
 .show-timer-button:hover {
     background-color: #8bc3a7;
-}
+} */
