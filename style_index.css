@@ -313,25 +313,9 @@ body {
 .resizer {
     width: 10px;
     height: 10px;
-    background: #298da9;
+    background: #000;
     position: absolute;
     bottom: 0;
     right: 0;
     cursor: se-resize;
 }
-
-/* .show-timer-button {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background-color: #3b9862;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    z-index: 1000;
-}
-
-.show-timer-button:hover {
-    background-color: #8bc3a7;
-} */
