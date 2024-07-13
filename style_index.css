@@ -283,7 +283,7 @@ body {
 }
 
 .pomodoro-bg {
-    background: url('../images/pomodoro-bg.jpg') no-repeat center center/cover;
+    background: url('./images/pomodoro-bg.jpg') no-repeat center center/cover;
 }
 
 .short-break-bg {
