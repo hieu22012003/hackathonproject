@@ -40,6 +40,7 @@
         </ul>
     </div>
 
+
     <!-- MAIN -->
     <div class="main-content">
         <div class="hero">
@@ -78,16 +79,13 @@
     </div>
 
     <!-- TIMER -->
-    <div class="timer-container" id="timer-container">
-        <div class="session-buttons">
-            <button class="session-button active" id="pomodoro-button" onclick="setPomodoro()">Pomodoro</button>
-            <button class="session-button" id="short-break-button" onclick="setShortBreak()">Short Break</button>
-            <button class="session-button" id="long-break-button" onclick="setLongBreak()">Long Break</button>
-        </div>
+    <div class="timer-container pomodoro-bg" id="timer-container">
         <div class="timer" id="timer">25:00</div>
-        <button class="timer-button" id="start-button" onclick="startTimer()">START</button>
+        <button class="timer-button" id="start-button" onclick="startTimer()">BẮT ĐẦU</button>
+        <div class="resizer" id="resizer"></div>
     </div>
-    <button class="show-timer-button" onclick="toggleTimer()">Hiển thị đồng hồ</button>
+    @REM <button class="show-timer-button" onclick="toggleTimer()">Hiển thị đồng hồ</button>
+
 
     <script>
         let timer;
@@ -99,9 +97,8 @@
             clearInterval(timer);
             timeLeft = 25 * 60;
             document.getElementById('timer').innerText = '25:00';
-            document.getElementById('pomodoro-button').classList.add('active');
-            document.getElementById('short-break-button').classList.remove('active');
-            document.getElementById('long-break-button').classList.remove('active');
+            document.getElementById('timer-container').classList.add('pomodoro-bg');
+            document.getElementById('timer-container').classList.remove('short-break-bg');
             isBreak = false;
         }
 
@@ -109,23 +106,13 @@
             clearInterval(timer);
             timeLeft = 5 * 60;
             document.getElementById('timer').innerText = '05:00';
-            document.getElementById('pomodoro-button').classList.remove('active');
-            document.getElementById('short-break-button').classList.add('active');
-            document.getElementById('long-break-button').classList.remove('active');
-            isBreak = true;
-        }
-
-        function setLongBreak() {
-            clearInterval(timer);
-            timeLeft = 15 * 60;
-            document.getElementById('timer').innerText = '15:00';
-            document.getElementById('pomodoro-button').classList.remove('active');
-            document.getElementById('short-break-button').classList.remove('active');
-            document.getElementById('long-break-button').classList.add('active');
+            document.getElementById('timer-container').classList.add('short-break-bg');
+            document.getElementById('timer-container').classList.remove('pomodoro-bg');
             isBreak = true;
         }
 
         function startTimer() {
+            document.getElementById('start-button').style.display = 'none'; // Hide the start button
             if (timer) clearInterval(timer);
             timer = setInterval(updateTimer, 1000);
         }
@@ -134,20 +121,12 @@
             if (timeLeft <= 0) {
                 clearInterval(timer);
                 if (isBreak) {
-                    if (document.getElementById('short-break-button').classList.contains('active')) {
-                        setPomodoro();
-                    } else if (document.getElementById('long-break-button').classList.contains('active')) {
-                        setPomodoro();
-                    }
+                    setPomodoro();
                 } else {
                     sessionCount++;
-                    if (sessionCount % 4 === 0) {
-                        setLongBreak();
-                    } else {
-                        setShortBreak();
-                    }
+                    setShortBreak();
                 }
-                startTimer(); // Start the timer for the next session or break
+                startTimer();
             }
 
             let minutes = Math.floor(timeLeft / 60);
@@ -156,50 +135,75 @@
             timeLeft--;
         }
 
-        // Drag and drop functionality
-        dragElement(document.getElementById("timer-container"));
+        const timerContainer = document.getElementById("timer-container");
+        const resizer = document.getElementById("resizer");
+        let isResizing = false;
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
-        function dragElement(element) {
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            element.onmousedown = dragMouseDown;
+        timerContainer.addEventListener('mousedown', dragMouseDown);
+        resizer.addEventListener('mousedown', resizeMouseDown);
 
-            function dragMouseDown(e) {
-                e = e || window.event;
-                e.preventDefault();
-                // Get the mouse cursor position at startup
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
-            }
-
-            function elementDrag(e) {
-                e = e || window.event;
-                e.preventDefault();
-                // Calculate the new cursor position
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                // Set the element's new position
-                element.style.top = (element.offsetTop - pos2) + "px";
-                element.style.left = (element.offsetLeft - pos1) + "px";
-            }
-
-            function closeDragElement() {
-                // Stop moving when mouse button is released
-                document.onmouseup = null;
-                document.onmousemove = null;
-            }
+        function dragMouseDown(e) {
+            if (isResizing) return;
+            e = e || window.event;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
         }
-        function toggleTimer() {
-            const timer = document.getElementById('timer-container');
-            if (timer.style.display === 'none') {
-                timer.style.display = 'block';
-            } else {
-                timer.style.display = 'none';
-            }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            timerContainer.style.top = (timerContainer.offsetTop - pos2) + "px";
+            timerContainer.style.left = (timerContainer.offsetLeft - pos1) + "px";
         }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+
+        function resizeMouseDown(e) {
+            isResizing = true;
+            e = e || window.event;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeResizeElement;
+            document.onmousemove = elementResize;
+        }
+
+        function elementResize(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            timerContainer.style.width = (timerContainer.offsetWidth - pos1) + "px";
+            timerContainer.style.height = (timerContainer.offsetHeight - pos2) + "px";
+        }
+
+        function closeResizeElement() {
+            isResizing = false;
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+         
+        @REM function toggleTimer() {
+        @REM     const timer = document.getElementById('timer-container');
+        @REM     if (timer.style.display === 'none') {
+        @REM         timer.style.display = 'block';
+        @REM     } else {
+        @REM         timer.style.display = 'none';
+        @REM     }
+        @REM }    
     </script>
 </body>
 
