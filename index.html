@@ -9,18 +9,20 @@
     <link rel="stylesheet" href="css/style_index.css">
     <style>
         .result-container {
-            width: 300px; /* Chiều rộng của hình chữ nhật */
-            min-height: 100px; /* Chiều cao tối thiểu của hình chữ nhật */
-            background-color: #000; /* Màu nền đen */
-            color: #00FF00; /* Màu chữ xanh lá */
-            border: 1px solid #00FF00; /* Viền màu xanh lá */
-            padding: 10px;
-            position: absolute; /* Để cho phép định vị tuyệt đối */
-            cursor: move; /* Con trỏ chuyển sang biểu tượng kéo khi di chuột qua */
-            z-index: 10; /* Đảm bảo phần tử nằm trên cùng */
-            border-radius: 5px; /* Góc bo tròn nhẹ */
-            overflow: auto; /* Hiển thị thanh cuộn nếu nội dung quá lớn */
-        }
+    display: none; /* Ẩn ban đầu */
+    width: 300px; /* Chiều rộng của hình chữ nhật */
+    min-height: 100px; /* Chiều cao tối thiểu của hình chữ nhật */
+    background-color: #000; /* Màu nền đen */
+    color: #00FF00; /* Màu chữ xanh lá */
+    border: 1px solid #00FF00; /* Viền màu xanh lá */
+    padding: 10px;
+    position: absolute; /* Để cho phép định vị tuyệt đối */
+    cursor: move; /* Con trỏ chuyển sang biểu tượng kéo khi di chuột qua */
+    z-index: 10; /* Đảm bảo phần tử nằm trên cùng */
+    border-radius: 5px; /* Góc bo tròn nhẹ */
+    overflow: auto; /* Hiển thị thanh cuộn nếu nội dung quá lớn */
+}
+
     </style>
 </head>
 
@@ -113,74 +115,74 @@
             },
         });
 
-        const searchButton = document.getElementById('search-button');
-        const searchInput = document.getElementById('search-input');
-        const resultContainer = document.getElementById('result-container');
+       const searchButton = document.getElementById('search-button');
+const searchInput = document.getElementById('search-input');
+const resultContainer = document.getElementById('result-container');
 
-        const searchData = {
-            "gen ai": "Gen AI là viết tắt của trí tuệ nhân tạo...",
-            "machine learning": "Machine Learning là một nhánh của trí tuệ nhân tạo, tập trung vào việc học từ dữ liệu...",
-            "deep learning": "Deep Learning là một phần của Machine Learning, sử dụng các mạng neuron sâu để mô hình hóa dữ liệu phức tạp...",
-            "data science": "Data Science là một lĩnh vực liên ngành sử dụng các phương pháp, quy trình, thuật toán và hệ thống khoa học để trích xuất kiến thức và hiểu biết từ dữ liệu...",
-            "big data": "Big Data đề cập đến các tập dữ liệu lớn và phức tạp mà các công cụ xử lý dữ liệu truyền thống không thể xử lý được..."
-        };
+const searchData = {
+    "gen ai": "Gen AI là viết tắt của trí tuệ nhân tạo...",
+    "machine learning": "Machine Learning là một nhánh của trí tuệ nhân tạo, tập trung vào việc học từ dữ liệu...",
+    "deep learning": "Deep Learning là một phần của Machine Learning, sử dụng các mạng neuron sâu để mô hình hóa dữ liệu phức tạp...",
+    "data science": "Data Science là một lĩnh vực liên ngành sử dụng các phương pháp, quy trình, thuật toán và hệ thống khoa học để trích xuất kiến thức và hiểu biết từ dữ liệu...",
+    "big data": "Big Data đề cập đến các tập dữ liệu lớn và phức tạp mà các công cụ xử lý dữ liệu truyền thống không thể xử lý được..."
+};
 
-        function displayResult(query) {
-            const result = searchData[query.toLowerCase()];
-            if (result) {
-                resultContainer.innerHTML = result;
-                resultContainer.style.display = 'block';
-            } else {
-                resultContainer.innerHTML = "Không tìm thấy kết quả.";
-                resultContainer.style.display = 'block';
-            }
+function displayResult(query) {
+    const result = searchData[query.toLowerCase()];
+    if (result) {
+        resultContainer.innerHTML = result;
+        resultContainer.style.display = 'block';
+    } else {
+        resultContainer.innerHTML = "Không tìm thấy kết quả.";
+        resultContainer.style.display = 'block';
+    }
+}
+
+searchButton.addEventListener('click', () => {
+    const query = searchInput.value.trim();
+    if (query) {
+        displayResult(query);
+    }
+});
+
+searchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query) {
+            displayResult(query);
         }
+    }
+});
 
-        searchButton.addEventListener('click', () => {
-            const query = searchInput.value.trim();
-            if (query) {
-                displayResult(query);
-            }
-        });
+// Drag functionality
+resultContainer.onmousedown = function(event) {
+    resultContainer.style.position = 'absolute';
+    resultContainer.style.zIndex = 1000;
 
-        searchInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                const query = searchInput.value.trim();
-                if (query) {
-                    displayResult(query);
-                }
-            }
-        });
+    document.body.append(resultContainer);
 
-        // Drag functionality
-        resultContainer.onmousedown = function(event) {
-            resultContainer.style.position = 'absolute';
-            resultContainer.style.zIndex = 1000;
-        
-            document.body.append(resultContainer);
-        
-            function moveAt(pageX, pageY) {
-                resultContainer.style.left = pageX - resultContainer.offsetWidth / 2 + 'px';
-                resultContainer.style.top = pageY - resultContainer.offsetHeight / 2 + 'px';
-            }
-        
-            moveAt(event.pageX, event.pageY);
-        
-            function onMouseMove(event) {
-                moveAt(event.pageX, event.pageY);
-            }
-        
-            document.addEventListener('mousemove', onMouseMove);
-        
-            resultContainer.onmouseup = function() {
-                document.removeEventListener('mousemove', onMouseMove);
-                resultContainer.onmouseup = null;
-            };
-        };
+    function moveAt(pageX, pageY) {
+        resultContainer.style.left = pageX - resultContainer.offsetWidth / 2 + 'px';
+        resultContainer.style.top = pageY - resultContainer.offsetHeight / 2 + 'px';
+    }
 
-        resultContainer.ondragstart = function() {
-            return false;
-        };
+    moveAt(event.pageX, event.pageY);
+
+    function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+
+    resultContainer.onmouseup = function() {
+        document.removeEventListener('mousemove', onMouseMove);
+        resultContainer.onmouseup = null;
+    };
+};
+
+resultContainer.ondragstart = function() {
+    return false;
+};
     </script>
 </body>
 

@@ -3,18 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <title>Pomodoro Timer</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
+       body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+        .navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.navbar .logo {
+    display: flex;
+    align-items: center;
+}
+.navbar img {
+    height: 70px;
+}
+.navbar .logo span {
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 10px;
+    color: #ffffff;
+}
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.navbar ul li {
+    margin: 0 15px;
+    transition: background-color 0.3s ease;
+}
+.navbar ul li:hover {
+    background-color: #e0e0e0;
+}
+.navbar ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 15px;
+    display: block;
+}
+.navbar ul li .material-icons {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+.navbar .search-bar {
+    flex-grow: 1;
+    margin: 0 20px;
+}
+.navbar .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+.navbar .login-buttons {
+    display: flex;
+    align-items: center;
+}
+.navbar .login-buttons a {
+    margin-left: 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border-radius: 5px;
+}
+.generate-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #1f2937; /* Nền màu xanh đen */
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.generate-button i {
+    margin-right: 2px;
+    font-size: 10px;
+}
+
+.sidebar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 200px;
+    position: fixed;
+    top: 70px;
+    bottom: 0;
+    left: 0;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar ul li {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+.sidebar ul li:hover {
+    background-color: #e0e0e0;
+}
+.sidebar ul li .material-icons {
+    font-size: 20px;
+    margin-right: 10px;
+}
+.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 15px;
+    display: block;
+    width: 100%;
+}
         .timer-container {
             position: fixed;
             bottom: 10px;
@@ -73,6 +191,37 @@
     </style>
 </head>
 <body>
+<body>
+    <!-- NAV -->
+    <div class="navbar">
+        <div class="logo">
+            <img src="images/logo.png" alt="GAE Logo">
+            <!-- <span>GAE</span> -->
+        </div>
+        <ul>
+            <li><a href="index.html"><i class="material-icons">home</i> Home</a></li>
+            <li><a href="#"><i class="material-icons">info</i> About</a></li>
+            <li><a href="#"><i class="material-icons">book</i> Courses</a></li>
+            <li><a href="#"><i class="material-icons">group</i> Community</a></li>
+            <li><a href="#"><i class="material-icons">email</i> Contact</a></li>
+        </ul>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="login-buttons">
+            <a href="quiz.html" class="generate-button"><i class="material-icons">sparkles</i> Generate</a>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <ul>
+            <li><i class="material-icons">person</i><a href="#">My account</a></li>
+            <li><i class="material-icons">menu_book</i><a href="#">My learning</a></li>
+            <li><i class="material-icons">work</i><a href="#">Project</a></li>
+            <li><i class="material-icons">workspace_premium</i><a href="#">Work space</a></li>
+        </ul>
+    </div>
     <div class="timer-container" id="timer-container">
         <video autoplay muted loop>
             <source src="video/demo.mp4" type="video/mp4">
