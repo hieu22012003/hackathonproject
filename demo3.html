@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo Cáo Yêu Cầu</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    canvas {
+      max-width: 600px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Báo Cáo Yêu Cầu</h1>
+  <h2>Yêu Cầu Về Động Tác Luyện Tập</h2>
+  <canvas id="exerciseChart"></canvas>
+  <h2>Xu Hướng Tuyển Dụng Nguồn Lao Động</h2>
+  <canvas id="jobTrendChart"></canvas>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Dữ liệu mẫu, thay thế bằng dữ liệu thực tế từ server
+      const data = {
+        "requests": [
+          { "type": "exercise", "category": "chest", "count": 120 },
+          { "type": "exercise", "category": "back", "count": 80 },
+          { "type": "job_trend", "category": "software_development", "count": 150 },
+          { "type": "job_trend", "category": "marketing", "count": 100 }
+        ]
+      };
+
+      const exerciseData = data.requests.filter(request => request.type === 'exercise');
+      const jobTrendData = data.requests.filter(request => request.type === 'job_trend');
+
+      const exerciseLabels = exerciseData.map(request => request.category);
+      const exerciseCounts = exerciseData.map(request => request.count);
+
+      const jobTrendLabels = jobTrendData.map(request => request.category);
+      const jobTrendCounts = jobTrendData.map(request => request.count);
+
+      // Tạo biểu đồ cho yêu cầu động tác luyện tập
+      const ctx1 = document.getElementById('exerciseChart').getContext('2d');
+      new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: exerciseLabels,
+          datasets: [{
+            label: 'Số lượng yêu cầu động tác luyện tập',
+            data: exerciseCounts,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Tạo biểu đồ cho xu hướng tuyển dụng nguồn lao động
+      const ctx2 = document.getElementById('jobTrendChart').getContext('2d');
+      new Chart(ctx2, {
+        type: 'pie',
+        data: {
+          labels: jobTrendLabels,
+          datasets: [{
+            label: 'Xu hướng tuyển dụng nguồn lao động',
+            data: jobTrendCounts,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 1
+          }]
+        }
+      });
+    });
+  </script>
+</body>
+</html>
