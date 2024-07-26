@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .timer-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 300px;
+            height: 200px;
+            border: 2px solid #000;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .timer-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        .timer {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 2;
+            font-size: 2em;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .button-container {
+            position: fixed;
+            bottom: 10px;
+            right: 320px; /* Adjusted to position it to the left of the timer container */
+            display: flex;
+            gap: 10px;
+        }
+        .timer-button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            background-color: #000;
+            color: #fff;
+            border-radius: 5px;
+        }
+        .fullscreen {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 1.5em;
+            z-index: 3;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer-container" id="timer-container">
+        <video autoplay muted loop>
+            <source src="video/demo.mp4" type="video/mp4">
+        </video>
+        <div class="timer" id="timer">25:00</div>
+        <button class="fullscreen" onclick="toggleFullscreen()">⤢</button>
+    </div>
+    <div class="button-container">
+        <button class="timer-button" id="start-button" onclick="startStopTimer()">BẮT ĐẦU</button>
+        <button class="timer-button" onclick="restartTimer()">RESTART</button>
+        <button class="timer-button" onclick="adjustTime()">ADJUST</button>
+    </div>
+    <script>
+        let timer;
+        let timeLeft = 25 * 60;
+        let isRunning = false;
+
+        function startStopTimer() {
+            if (isRunning) {
+                clearInterval(timer);
+                document.getElementById('start-button').innerText = 'BẮT ĐẦU';
+            } else {
+                timer = setInterval(updateTimer, 1000);
+                document.getElementById('start-button').innerText = 'TẠM DỪNG';
+            }
+            isRunning = !isRunning;
+        }
+
+        function restartTimer() {
+            clearInterval(timer);
+            timeLeft = 25 * 60;
+            document.getElementById('timer').innerText = '25:00';
+            document.getElementById('start-button').innerText = 'BẮT ĐẦU';
+            isRunning = false;
+        }
+
+        function adjustTime() {
+            let newTime = prompt('Nhập khung thời gian mới (ví dụ: 30:00):', '25:00');
+            if (newTime) {
+                let parts = newTime.split(':');
+                if (parts.length === 2) {
+                    let minutes = parseInt(parts[0]);
+                    let seconds = parseInt(parts[1]);
+                    if (!isNaN(minutes) && !isNaN(seconds)) {
+                        timeLeft = minutes * 60 + seconds;
+                        document.getElementById('timer').innerText = newTime;
+                    }
+                }
+            }
+        }
+
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                isRunning = false;
+                document.getElementById('start-button').innerText = 'BẮT ĐẦU';
+                return;
+            }
+
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById('timer').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timeLeft--;
+        }
+
+        function toggleFullscreen() {
+            const timerContainer = document.getElementById("timer-container");
+            if (!document.fullscreenElement) {
+                if (timerContainer.requestFullscreen) {
+                    timerContainer.requestFullscreen();
+                } else if (timerContainer.mozRequestFullScreen) {
+                    timerContainer.mozRequestFullScreen();
+                } else if (timerContainer.webkitRequestFullscreen) {
+                    timerContainer.webkitRequestFullscreen();
+                } else if (timerContainer.msRequestFullscreen) {
+                    timerContainer.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
