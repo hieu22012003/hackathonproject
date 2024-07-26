@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GAE Interface</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="style_index.css">
+    <link rel="stylesheet" href="css/style_index.css">
 </head>
 
 <body>
@@ -14,6 +14,7 @@
     <div class="navbar">
         <div class="logo">
             <img src="images/logo.png" alt="GAE Logo">
+            <!-- <span>GAE</span> -->
         </div>
         <ul>
             <li><a href="index.html"><i class="material-icons">home</i> Home</a></li>
@@ -48,7 +49,7 @@
             <div class="search-container">
                 <div class="search-box">
                     <i class="material-icons search-icon">search</i>
-                    <input type="text" placeholder="Tìm kiếm...">
+                    <input type="text" placeholder="Tìm kiếm...">   
                     <i class="material-icons voice-icon">mic</i>
                 </div>
             </div>
@@ -57,142 +58,50 @@
         <div class="cards">
             <div class="card">
                 <img src="images/ảnh 1.png" alt="">
-                <div class="button-link">Lên lịch trình học</div>
-                <p>(Coming Soon...)</p>
+                <!-- <i class="material-icons">calendar_today</i> -->
+                <a href = "calendar.html"class ="button-link">Lên lịch trình học</a>
+                <p>In_Progress...</p>
             </div>
             <div class="card">
                 <img src="images/ảnh 2.png" alt="">
-                <p><a href="quiz.html" class="button-link">Làm Quiz test</a></p>
+                <!-- <i class="material-icons">edit</i> -->
+               <p><a href="quiz.html" class ="button-link">Làm Quiz test</a></p> 
             </div>
             <div class="card">
                 <img src="images/ảnh 3.jpg" alt="">
-                <div class="button-link">Cá nhân hóa</div>
+                <!-- <i class="material-icons">person_pin</i> -->
+                <div class = "button-link">Cá nhân hóa</div>
                 <p>(Coming Soon...)</p>
             </div>
             <div class="card">
                 <img src="images/ảnh 4.jpg" alt="">
-                <div class="button-link">Thông báo nhắc nhở</div>
+                <!-- <i class="material-icons">notifications</i> -->
+                <div class = "button-link">Thông báo nhắc nhở</div>
                 <p>(Coming Soon...)</p>
             </div>
         </div>
+        <!-- <div class="note">
+            <h2>Note:</h2>
+            <p>- My target:</p>
+        </div> -->
     </div>
 
-    <!-- TIMER -->
-    <div class="timer-container pomodoro-bg" id="timer-container">
-        <div class="timer" id="timer">25:00</div>
-        <button class="timer-button" id="start-button" onclick="startTimer()">BẮT ĐẦU</button>
-        <div class="resizer" id="resizer"></div>
-    </div>
+    <!-- CLOCK -->
 
-    <script>
-        let timer;
-        let timeLeft = 25 * 60;
-        let sessionCount = 0;
-        let isBreak = false;
+    
+    <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/0.1.0-beta.5/libs/oversea/index.js"></script>
+      <script>
+          new CozeWebSDK.WebChatClient({
+            config: {
+              bot_id: '7393345978566885384',
+            },
+            componentProps: {
+              title: 'Giáo Viên Hướng Dẫn',
+              icon: 'https://lf16-alice-tos-sign.oceanapi-i18n.com/obj/ocean-cloud-tos-sg/FileBizType.BIZ_BOT_ICON/7371847970293400592_1721397959060431159.jpeg?lk3s=50ccb0c5&x-expires=1722028007&x-signature=mTnfQ6I%2FVH%2Bdust5JeghcuLtCPw%3D'
+            },
+          });
+      </script>
 
-        function setPomodoro() {
-            clearInterval(timer);
-            timeLeft = 25 * 60;
-            document.getElementById('timer').innerText = '25:00';
-            document.getElementById('timer-container').classList.add('pomodoro-bg');
-            document.getElementById('timer-container').classList.remove('short-break-bg');
-            isBreak = false;
-        }
-
-        function setShortBreak() {
-            clearInterval(timer);
-            timeLeft = 5 * 60;
-            document.getElementById('timer').innerText = '05:00';
-            document.getElementById('timer-container').classList.add('short-break-bg');
-            document.getElementById('timer-container').classList.remove('pomodoro-bg');
-            isBreak = true;
-        }
-
-        function startTimer() {
-            document.getElementById('start-button').style.display = 'none'; // Hide the start button
-            if (timer) clearInterval(timer);
-            timer = setInterval(updateTimer, 1000);
-        }
-
-        function updateTimer() {
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                if (isBreak) {
-                    setPomodoro();
-                } else {
-                    sessionCount++;
-                    setShortBreak();
-                }
-                startTimer();
-            }
-
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            document.getElementById('timer').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            timeLeft--;
-        }
-
-        const timerContainer = document.getElementById("timer-container");
-        const resizer = document.getElementById("resizer");
-        let isResizing = false;
-        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
-        timerContainer.addEventListener('mousedown', dragMouseDown);
-        resizer.addEventListener('mousedown', resizeMouseDown);
-
-        function dragMouseDown(e) {
-            if (isResizing) return;
-            e = e || window.event;
-            e.preventDefault();
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
-        }
-
-        function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            timerContainer.style.top = (timerContainer.offsetTop - pos2) + "px";
-            timerContainer.style.left = (timerContainer.offsetLeft - pos1) + "px";
-        }
-
-        function closeDragElement() {
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
-
-        function resizeMouseDown(e) {
-            isResizing = true;
-            e = e || window.event;
-            e.preventDefault();
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeResizeElement;
-            document.onmousemove = elementResize;
-        }
-
-        function elementResize(e) {
-            e = e || window.event;
-            e.preventDefault();
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            timerContainer.style.width = (timerContainer.offsetWidth - pos1) + "px";
-            timerContainer.style.height = (timerContainer.offsetHeight - pos2) + "px";
-        }
-
-        function closeResizeElement() {
-            isResizing = false;
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
-    </script>
 </body>
 
 </html>
