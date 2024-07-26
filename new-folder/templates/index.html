@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Generation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_quiz.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="GAE Logo">
+            <!-- <span>GAE</span> -->
+        </div>
+        <ul>
+            <li><a href="index.html"><i class="material-icons">home</i> Home</a></li>
+            <li><a href="#"><i class="material-icons">info</i> About</a></li>
+            <li><a href="#"><i class="material-icons">book</i> Courses</a></li>
+            <li><a href="#"><i class="material-icons">group</i> Community</a></li>
+            <li><a href="#"><i class="material-icons">email</i> Contact</a></li>
+        </ul>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="login-buttons">
+            <a href="API_Converstation.html" class="generate-button"><i class="material-icons">sparkles</i> Generate</a>
+        </div>
+    </div>
+
+    <div>
+        <h1>Summary Youtube Video</h1>
+    </div>
+    <form id="transcript-form">
+        <label for="video-id">YouTube Video ID:</label>
+        <input type="text" id="video-id" name="video_id" required>
+        <button type="submit">Get Transcript</button>
+    </form>
+    <div id="transcript-result"></div>
+
+    <script type="importmap">
+        {
+          "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+          }
+        }
+    </script>
+
+    <script type = "module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        // Access your API key (see "Set up your API key" above)
+        const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs";
+        const genAI = new GoogleGenerativeAI(API_KEY);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('transcript-form');
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const videoId = document.getElementById('video-id').value;
+                const resultDiv = document.getElementById('transcript-result');
+
+                try {
+                    // Fetch the transcript
+                    const response = await fetch(`/transcript?video_id=${videoId}`);
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Display the transcript
+                        resultDiv.innerHTML = `<h2>Transcript:</h2><p>${data.transcript}</p>`;
+
+                        // Run the summarization function
+                        await run(data.transcript);
+                    } else {
+                        resultDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+                }
+            });
+        });
+
+        async function run(transcript) {
+            // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+            const chat = model.startChat({
+                history: [
+                    {
+                        role: "user",
+                        parts: [{ text: "Dựa trên kịch bản YouTube đã phiên âm, hãy tạo một bản tóm tắt về nó. Tóm tắt nên có khoảng 500 từ." }],
+                    },
+                    {
+                        role: "user",
+                        parts: [{ text: transcript }],
+                    },
+                ],
+                generationConfig: {
+                    maxOutputTokens: 500,
+                },
+            });
+
+            try {
+                const result = await chat.sendMessage("Hãy tóm tắt văn bản trên");
+                const response = await result.response;
+                const summary = await response.text();
+
+                // Display the summary
+                const summaryDiv = document.getElementById('transcript-result');
+                summaryDiv.innerHTML += `<h2>Summary:</h2><p>${summary}</p>`;
+            } catch (error) {
+                console.error("Error in AI request:", error);
+                const resultDiv = document.getElementById('transcript-result');
+                resultDiv.innerHTML += `<p>Error: ${error.message}</p>`;
+            }
+        }
+
+    </script>
+</body>
+</html>
