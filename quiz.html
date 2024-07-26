@@ -1,158 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Generation</title>
-  <link rel="stylesheet" href="style_quiz.css">
-</head>
-<body>
-  <h1>Gemini API Integration</h1>
-  <!-- Input -->
-  <textarea id="prompt" placeholder="Enter your prompt" style="width: 100%; max-width: 600px; padding: 10px;"></textarea>
-  <span>
-    <button id="submit" style="padding: 10px; margin-top: 10px;">Submit</button>
 
-    <button id="get" style="padding: 10px; margin-top: 10px;">Get</button>
-  </span>
-  
-  <div id="result">Result will be displayed here...</div>
-  <script type="importmap">
-    {
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Generation</title>
+    <link rel="stylesheet" href="css/style_quiz.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="images/logo.png" alt="GAE Logo">
+            <!-- <span>GAE</span> -->
+        </div>
+        <ul>
+            <li><a href="index.html"><i class="material-icons">home</i> Home</a></li>
+            <li><a href="#"><i class="material-icons">info</i> About</a></li>
+            <li><a href="#"><i class="material-icons">book</i> Courses</a></li>
+            <li><a href="#"><i class="material-icons">group</i> Community</a></li>
+            <li><a href="#"><i class="material-icons">email</i> Contact</a></li>
+        </ul>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="login-buttons">
+            <a href="quiz.html" class="generate-button"><i class="material-icons">sparkles</i> Generate</a>
+        </div>
+    </div>
+
+    <div> 
+        <h1>Chủ đề sang Quiz</h1>
+        <a href ="quiz.html" class ="button-link">Chủ Đề</a>
+        <a href ="File_Upload.html" class="button-link">PDF/Word</a>
+    </div>
+    
+    <textarea id="prompt" placeholder="Hãy nhập chủ đề mà bạn muốn"></textarea>
+    <div style="text-align: center;" id="container">
+        <div>
+            <label for="question-type">Questions Type:</label>
+            <select id="question-type">
+                <option value="Multiple Choice">Multiple Choice</option>
+                <option value="Multiple Response">Multiple Resposne</option>
+                <!--<option value="True or False">True or False</option> -->
+            </select>
+        </div>
+        <div>
+        <label for="num-questions"> Max Questions:</label>
+        <select id="num-questions">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+            <option value="40">40</option>
+            <option value="45">45</option>
+            <option value="50">50</option>
+        </select>
+        </div>
+        <div>
+            <div style="text-align: center;" class = "btn">
+                <button id="submit">Submit</button>
+                <button id="get">Get</button>
+            </div>
+        </div>
+        <div class="loader" id="loading">
+            Ready!
+        </div>
+    </div>
+
+    <script type="importmap">
+    {   
       "imports": {
         "@google/generative-ai": "https://esm.run/@google/generative-ai"
       }
     }
   </script>
 
-  <!-- Script module để nhập và khởi tạo mô hình GenerativeAI -->
-  <div id="quiz-container"></div>
-  <script type="module">
-    import { GoogleGenerativeAI } from "@google/generative-ai";
+    <!-- Script module để nhập và khởi tạo mô hình GenerativeAI -->
+    <div id="quiz-container"></div>
+    <script type="module" src="./frontjs/quiz.js"></script>
+    <div class="footer">
+        <p>&copy; 2024 GAE. All rights reserved.</p>
+    </div>
 
-    const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs"; 
+        <div class="timer-container pomodoro-bg" id="timer-container">
+            <div class="timer" id="timer">25:00</div>
+            <button class="timer-button" id="start-button" onclick="startTimer()">BẮT ĐẦU</button>
+            <div class="resizer" id="resizer"></div>
+        </div>
 
-    const genAI = new GoogleGenerativeAI(API_KEY);
+        <script>
+            let timer;
+            let timeLeft = 25 * 60;
+            let sessionCount = 0;
+            let isBreak = false;
 
-    let model;
-    (async () => {
-        model = await genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    })();
+            function setPomodoro() {
+                clearInterval(timer);
+                timeLeft = 25 * 60;
+                document.getElementById('timer').innerText = '25:00';
+                document.getElementById('timer-container').classList.add('pomodoro-bg');
+                document.getElementById('timer-container').classList.remove('short-break-bg');
+                isBreak = false;
+            }
 
-    let text;   
-    async function run() {
-      const prompt = `Tạo ra 5 câu hỏi quiz với 4 đáp án khả thi mỗi câu, có chủ đề là: ${document.getElementById('prompt').value}. Hãy chắc chắn rằng mỗi câu sẽ chỉ có 1 đáp án đúng. Cấu trúc nó sẽ nên như này: 
-      [
-        { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 4", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] },
-        { question: "Câu hỏi 5", answers: [ { text: "Đáp án 1", correct: true/false }, { text: "Đáp án 2", correct: true/false }, { text: "Đáp án 3", correct: true/false }, { text: "Đáp án 4", correct: true/false } ] }
-      ];`;
-        try { 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        text = await response.text();
+            function setShortBreak() {
+                clearInterval(timer);
+                timeLeft = 5 * 60;
+                document.getElementById('timer').innerText = '05:00';
+                document.getElementById('timer-container').classList.add('short-break-bg');
+                document.getElementById('timer-container').classList.remove('pomodoro-bg');
+                isBreak = true;
+            }
 
-        const resultElement = document.getElementById("result");
-        resultElement.textContent = text;
-        } catch (error) {
-        console.error("Error generating content:", error);
-        }
-        console.log(prompt);
-    }
+            function startTimer() {
+                document.getElementById('start-button').style.display = 'none'; // Hide the start button
+                if (timer) clearInterval(timer);
+                timer = setInterval(updateTimer, 1000);
+            }
 
-    let quizArray; // Biến lưu trữ dữ liệu câu hỏi
-    let jsonDataLoaded = false; // Biến cờ để theo dõi xem dữ liệu đã được tải hay chưa
+            function updateTimer() {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    if (isBreak) {
+                        setPomodoro();
+                    } else {
+                        sessionCount++;
+                        setShortBreak();
+                    }
+                    startTimer();
+                }
 
-    function get() {
-        const stringtext = text.toString();
-        console.log(stringtext);
-        let jsonData = cleanJsonString(stringtext);
-        if (jsonData) {
-            quizArray = JSON.parse(jsonData);
-            console.log(quizArray);
-            console.log(typeof quizArray);
-            renderQuiz(quizArray);
-        } else {
-            console.error("Failed to clean JSON string");
-        }
-    }
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById('timer').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                timeLeft--;
+            }
 
-    function renderQuiz(quizData) {
-        const container = document.getElementById('quiz-container');
-        container.innerHTML = ''; // Clear previous quiz content
-        quizData.forEach((quiz, quizIndex) => {
-            const quizDiv = document.createElement('div');
-            quizDiv.classList.add('quiz');
+            const timerContainer = document.getElementById("timer-container");
+            const resizer = document.getElementById("resizer");
+            let isResizing = false;
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
-            const quizTitle = document.createElement('h3');
-            quizTitle.textContent = `Question ${quizIndex + 1}: ${quiz.question}`;
-            quizDiv.appendChild(quizTitle);
+            timerContainer.addEventListener('mousedown', dragMouseDown);
+            resizer.addEventListener('mousedown', resizeMouseDown);
 
-            const answersDiv = document.createElement('div');
-            answersDiv.classList.add('answers');
+            function dragMouseDown(e) {
+                if (isResizing) return;
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
 
-            quiz.answers.forEach((answer, answerIndex) => {
-                const answerLabel = document.createElement('label');
-                answerLabel.classList.add('answer-item');
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                timerContainer.style.top = (timerContainer.offsetTop - pos2) + "px";
+                timerContainer.style.left = (timerContainer.offsetLeft - pos1) + "px";
+            }
 
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = `quiz${quizIndex}_answer`;
-                radio.value = answerIndex;
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
 
-                const answerText = document.createElement('span');
-                answerText.textContent = answer.text;
-                answerLabel.appendChild(radio);
-                answerLabel.appendChild(answerText);
+            function resizeMouseDown(e) {
+                isResizing = true;
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeResizeElement;
+                document.onmousemove = elementResize;
+            }
 
-                const resultText = document.createElement('span');
-                resultText.classList.add('result-text');
-                answerLabel.appendChild(resultText);
+            function elementResize(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                timerContainer.style.width = (timerContainer.offsetWidth - pos1) + "px";
+                timerContainer.style.height = (timerContainer.offsetHeight - pos2) + "px";
+            }
 
-                radio.addEventListener('change', () => {
-                    const allLabels = answersDiv.querySelectorAll('label');
-                    allLabels.forEach(label => {
-                        const resultSpan = label.querySelector('.result-text');
-                        if (label === answerLabel) {
-                            if (answer.correct) {
-                                resultSpan.textContent = 'Correct!';
-                                resultSpan.classList.add('correct-text');
-                            } else {
-                                resultSpan.textContent = 'Wrong!';
-                                resultSpan.classList.add('incorrect-text');
-                            }
-                        } else {
-                            resultSpan.textContent = '';
-                            resultSpan.classList.remove('correct-text', 'incorrect-text');
-                        }
-                    });
-                });
-
-                answersDiv.appendChild(answerLabel);
-            });
-
-            quizDiv.appendChild(answersDiv);
-            container.appendChild(quizDiv);
-        });
-    }
-    function cleanJsonString(json) {
-        console.log('Original JSON:', json);
-        json = json.replace(/```json/g, '').replace(/```/g, '').trim();
-        console.log('Cleaned JSON:', json);
-        try {
-            let parsedJson = JSON.parse(json);
-            return JSON.stringify(parsedJson, null, 2);
-        } catch (e) {
-            console.error("Invalid JSON string", e);
-            return null;
-        }
-    }
-
-    document.getElementById('get').addEventListener('click', get);
-
-    document.getElementById('submit').addEventListener('click', run);
-  </script>
+            function closeResizeElement() {
+                isResizing = false;
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        </script>
 </body>
+
 </html>

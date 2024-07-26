@@ -260,3 +260,77 @@ body {
     background-color: #45a049; /* Darker green background on hover */
     transform: scale(1.1); /* Slightly increase size on hover */
 }
+/* Additional styles for the timer */
+/* Timer Styles */
+.timer-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    cursor: grab;
+    resize: both;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.pomodoro-bg {
+    background: url('images/pomodoro-bg.jpg') no-repeat center center/cover;
+}
+
+.short-break-bg {
+    background: #7ae3c3;
+}
+
+.timer {
+    font-size: 48px;
+    color: #ff6600;
+    margin-bottom: 20px;
+}
+
+.timer-button {
+    background: #00bcd4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.timer-button:hover {
+    background: #0097a7;
+}
+
+.resizer {
+    width: 10px;
+    height: 10px;
+    background: #000;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: se-resize;
+}
+
+.result-container {
+    width: 300px; /* Chiều rộng của hình chữ nhật */
+    min-height: 100px; /* Chiều cao tối thiểu của hình chữ nhật */
+    background-color: #000; /* Màu nền đen */
+    color: #00FF00; /* Màu chữ xanh lá */
+    border: 1px solid #00FF00; /* Viền màu xanh lá */
+    padding: 10px;
+    position: absolute; /* Để cho phép định vị tuyệt đối */
+    cursor: move; /* Con trỏ chuyển sang biểu tượng kéo khi di chuột qua */
+    z-index: 10; /* Đảm bảo phần tử nằm trên cùng */
+    border-radius: 5px; /* Góc bo tròn nhẹ */
+    overflow: auto; /* Hiển thị thanh cuộn nếu nội dung quá lớn */
+}
