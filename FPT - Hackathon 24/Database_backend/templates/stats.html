@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="target">
+        <h1>Thống Kê</h1>
+        <h2>Số lượng</h2>
+        <ul>
+            {% for content, timestamp in count.items() %}
+                <li>{{ content }}: {{ timestamp }}</li>
+            {% endfor %}
+        </ul>
+    
+        <p>Mean length: {{ mean_length }}</p>
+        <p>Max length: {{ max_length }}</p>
+        <p>Min length: {{ min_length }}</p>
+        <p>Standard deviation of length: {{ std_length }}</p>
+    
+        <h2>Top 10 Content</h2>
+        <ul>
+            {% for key, value in top_10.items() %}
+                <li>{{ key }}: {{ value }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+    <script>
+        var top10Data = "{{js_top_10}}"
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(top10Data),
+                datasets: [{
+                    label: 'Top 10 Content',
+                    data: Object.values(top10Data),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
