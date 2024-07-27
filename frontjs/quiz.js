@@ -115,15 +115,10 @@ var text_0 = '';
             `;
     }        
 
-    function renderQuiz(quizData) {    
+    function renderQuiz(quizData) {
         const type1 = document.getElementById('question-type').value;
         const container = document.getElementById('quiz-container');
         container.innerHTML = ''; // Clear previous quiz content
-    
-        if (!Array.isArray(quizData)) {
-            console.error("Expected quizData to be an array, but received:", quizData);
-            return;
-        }
     
         if (type1 === "Multiple Response") {
             quizData.forEach((quiz, quizIndex) => {
@@ -139,13 +134,44 @@ var text_0 = '';
     
                 quiz.answers.forEach((answer, answerIndex) => {
                     const answerLabel = document.createElement('label');
-                    const answerInput = document.createElement('input');
-                    answerInput.type = 'checkbox';
-                    answerInput.name = `quiz-${quizIndex}-answer-${answerIndex}`;
-                    answerInput.value = answer.correct;
+                    answerLabel.classList.add('answer-item');
     
-                    answerLabel.appendChild(answerInput);
-                    answerLabel.appendChild(document.createTextNode(answer.text));
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = `quiz${quizIndex}_answer`;
+                    checkbox.value = answerIndex;
+    
+                    const answerText = document.createElement('span');
+                    answerText.textContent = answer.text;
+                    answerLabel.appendChild(checkbox);
+                    answerLabel.appendChild(answerText);
+    
+                    const resultText = document.createElement('span');
+                    resultText.classList.add('result-text');
+                    answerLabel.appendChild(resultText);
+    
+                    checkbox.addEventListener('change', () => {
+                        const allLabels = answersDiv.querySelectorAll('label');
+                        allLabels.forEach(label => {
+                            const resultSpan = label.querySelector('.result-text');
+                            if (label === answerLabel) {
+                                if (checkbox.checked) {
+                                    if (answer.correct) {
+                                        resultSpan.textContent = 'Correct!';
+                                        resultSpan.classList.remove('wrong');
+                                        resultSpan.classList.add('correct-text');
+                                    } else {
+                                        resultSpan.textContent = 'Wrong!';
+                                        resultSpan.classList.remove('correct');
+                                        resultSpan.classList.add('wrong-text');
+                                    }
+                                } else {
+                                    resultSpan.textContent = '';
+                                }
+                            }
+                        });
+                    });
+    
                     answersDiv.appendChild(answerLabel);
                 });
     
@@ -166,51 +192,126 @@ var text_0 = '';
     
                 quiz.answers.forEach((answer, answerIndex) => {
                     const answerLabel = document.createElement('label');
-                    const answerInput = document.createElement('input');
-                    answerInput.type = 'radio';
-                    answerInput.name = `quiz-${quizIndex}-answer`;
-                    answerInput.value = answer.correct;
+                    answerLabel.classList.add('answer-item');
     
-                    answerLabel.appendChild(answerInput);
-                    answerLabel.appendChild(document.createTextNode(answer.text));
+                    const radioButton = document.createElement('input');
+                    radioButton.type = 'radio';
+                    radioButton.name = `quiz${quizIndex}_answer`;
+                    radioButton.value = answerIndex;
+    
+                    const answerText = document.createElement('span');
+                    answerText.textContent = answer.text;
+                    answerLabel.appendChild(radioButton);
+                    answerLabel.appendChild(answerText);
+    
+                    const resultText = document.createElement('span');
+                    resultText.classList.add('result-text');
+                    answerLabel.appendChild(resultText);
+    
+                    radioButton.addEventListener('change', () => {
+                        const allLabels = answersDiv.querySelectorAll('label');
+                        allLabels.forEach(label => {
+                            const resultSpan = label.querySelector('.result-text');
+                            if (label === answerLabel) {
+                                if (answer.correct) {
+                                    resultSpan.textContent = 'Correct!';
+                                    resultSpan.classList.remove('wrong');
+                                    resultSpan.classList.add('correct-text');
+                                } else {
+                                    resultSpan.textContent = 'Wrong!';
+                                    resultSpan.classList.remove('correct');
+                                    resultSpan.classList.add('incorrect-text');
+                                }
+                            } else {
+                                label.querySelector('input').checked = false;
+                                resultSpan.textContent = '';
+                            }
+                        });
+                    });
+    
                     answersDiv.appendChild(answerLabel);
                 });
     
                 quizDiv.appendChild(answersDiv);
                 container.appendChild(quizDiv);
             });
-        } else if (type1 === "True or False") {
+        } else if (type1 =="True or False") {
             quizData.forEach((quiz, quizIndex) => {
                 const quizDiv = document.createElement('div');
                 quizDiv.classList.add('quiz');
-    
+              
                 const quizTitle = document.createElement('h3');
                 quizTitle.textContent = `Question ${quizIndex + 1}: ${quiz.question}`;
                 quizDiv.appendChild(quizTitle);
-    
+              
                 const answersDiv = document.createElement('div');
                 answersDiv.classList.add('answers');
-    
+              
                 quiz.answers.forEach((answer, answerIndex) => {
-                    const answerLabel = document.createElement('label');
-                    const answerInput = document.createElement('input');
-                    answerInput.type = 'radio';
-                    answerInput.name = `quiz-${quizIndex}-answer`;
-                    answerInput.value = answer.correct;
-    
-                    answerLabel.appendChild(answerInput);
-                    answerLabel.appendChild(document.createTextNode(answer.text));
-                    answersDiv.appendChild(answerLabel);
+                  const answerLabel = document.createElement('label');
+                  answerLabel.classList.add('answer-item');
+              
+                  const answerText = document.createElement('span');
+                  answerText.textContent = answer.text;
+                  answerLabel.appendChild(answerText);
+              
+                  const trueRadio = document.createElement('input');
+                  trueRadio.type = 'radio';
+                  trueRadio.name = `quiz${quizIndex}_answer${answerIndex}`;
+                  trueRadio.value = 'true';
+              
+                  const trueLabel = document.createElement('label');
+                  trueLabel.textContent = 'True';
+                  trueLabel.appendChild(trueRadio);
+                  answerLabel.appendChild(trueLabel);
+              
+                  const falseRadio = document.createElement('input');
+                  falseRadio.type = 'radio';
+                  falseRadio.name = `quiz${quizIndex}_answer${answerIndex}`;
+                  falseRadio.value = 'false';
+              
+                  const falseLabel = document.createElement('label');
+                  falseLabel.textContent = 'False';
+                  falseLabel.appendChild(falseRadio);
+                  answerLabel.appendChild(falseLabel);
+              
+                  const resultText = document.createElement('span');
+                  resultText.classList.add('result-text');
+                  answerLabel.appendChild(resultText);
+              
+                  const checkAnswer = () => {
+                    const selectedValue = answersDiv.querySelector(input[name=`quiz${quizIndex}_answer${answerIndex}`],checked).value;
+                    if ((selectedValue === 'true' && answer.correct) || (selectedValue === 'false' && !answer.correct)) {
+                      resultText.textContent = 'Correct!';
+                      resultText.classList.remove('correct-text', 'incorrect-text');
+                      resultText.classList.add('correct-text');
+                    } else {
+                      resultText.textContent = 'Wrong!';
+                      resultText.classList.add('incorrect-text');
+                    }
+                  };
+              
+                  // Add event listener outside the loop (attached to both radio buttons)
+                  trueRadio.addEventListener('change', checkAnswer);
+                  falseRadio.addEventListener('change', checkAnswer);
+              
+                  answersDiv.appendChild(answerLabel);
                 });
-    
+              
                 quizDiv.appendChild(answersDiv);
-                container.appendChild(quizDiv);
-            });
+              
+                // Make sure `container` is defined before appending
+                if (container) {
+                  container.appendChild(quizDiv);
+                } else {
+                  // Handle the case where container is not available
+                  console.error("Container element not found. Please define the 'container' variable.");
+                }
+              });
+              
         }
     }
     
-
-
 function cleanJsonString(json) {
     console.log('Original JSON:', json);
     json = json.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -305,6 +406,11 @@ function scoreQuiz() {
                                             4. Tạo một lịch trình học tập phù hợp với tình hình hiện tại.` }],
                     },
                 ],
+                generationConfig : {
+                    temperature: 0.8,
+                    topP: 1,
+                    topK: 16,
+                  },
             });
     
             const msg = resultString;
