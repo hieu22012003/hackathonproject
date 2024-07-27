@@ -10,11 +10,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #8a7760;
         }
         .navbar {
             background-color: #fff;
@@ -23,10 +19,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
         }
         .navbar .logo {
             display: flex;
@@ -92,7 +84,7 @@
             display: inline-flex;
             align-items: center;
             padding: 10px 20px;
-            background-color: #1f2937;
+            background-color: #1f2937; /* Nền màu xanh đen */
             color: white;
             border-radius: 8px;
             text-decoration: none;
@@ -139,17 +131,15 @@
             width: 100%;
         }
         .timer-container {
-            width: 800px;
-            height: 500px;
+            position: relative;
+            width: 600px;
+            height: 400px;
             border: 2px solid #000;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            background: #c1c1c1;
+            margin: 20px auto;
         }
         .timer-container video,
         .timer-container img {
@@ -162,29 +152,40 @@
             z-index: 1;
         }
         .timer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             z-index: 2;
-            font-size: 3em;
+            font-size: 2em;
             color: #fff;
             background: rgba(0, 0, 0, 0.5);
-            padding: 10px 20px;
+            padding: 5px 10px;
             border-radius: 5px;
         }
         .button-container {
             display: flex;
+            justify-content: center;
             gap: 10px;
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            margin-top: 20px;
         }
         .timer-button {
-            padding: 15px 30px;
-            font-size: 1.2em;
+            padding: 10px 20px;
+            font-size: 1em;
             cursor: pointer;
             border: none;
-            background-color: #000;
+            background-color: #4CAF50;
             color: #fff;
             border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .timer-button:hover {
+            background-color: #45a049;
+        }
+        .bottom-left-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
         }
         .fullscreen {
             position: absolute;
@@ -194,39 +195,37 @@
             font-size: 1.5em;
             z-index: 3;
         }
-        .upload-button {
+        .upload-button label {
             position: fixed;
             bottom: 10px;
             right: 10px;
             display: flex;
             gap: 10px;
         }
-        input[type="file"] {
-            display: none;
-        }
-        .help-button {
+        .help-button button {
             position: fixed;
             bottom: 300px;
             right: 10px;
             display: flex;
             gap: 10px;
+            background-color: #000;
+
         }
-        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 100;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-            justify-content: center;
+            background-color: rgba(0,0,0,0.4);
             align-items: center;
+            justify-content: center;
         }
         .modal-content {
-            background-color: #fff;
+            background-color: #fefefe;
             margin: auto;
             padding: 20px;
             border: 1px solid #888;
@@ -253,6 +252,7 @@
     <div class="navbar">
         <div class="logo">
             <img src="images/logo.png" alt="GAE Logo">
+            <!-- <span>GAE</span> -->
         </div>
         <ul>
             <li><a href="index.html"><i class="material-icons">home</i> Home</a></li>
@@ -280,30 +280,32 @@
     </div>
 
     <div class="timer-container" id="timer-container">
-        <video autoplay muted loop id="background-video" style="display: none;"></video>
-        <img id="background-image" style="display: none;">
+        <video id="background-video" autoplay loop muted></video>
         <div class="timer" id="timer">25:00</div>
-        <button class="fullscreen" onclick="toggleFullscreen()">⤢</button>
-    </div>
-    <div class="button-container">
-        <button class="timer-button" id="start-button" onclick="startStopTimer()">BẮT ĐẦU</button>
-        <button class="timer-button" onclick="restartTimer()">RESTART</button>
-        <button class="timer-button" onclick="adjustTime()">ADJUST</button>
-    </div>
-    <div class="upload-button">
-        <label for="file-upload" class="timer-button">Chọn Video/Ảnh</label>
-        <input type="file" id="file-upload" accept="video/*, image/*" onchange="handleFileUpload(event)">
-    </div>
-    <div class="help-button">
-        <button class="timer-button" onclick="openHelpModal()"><i class="material-icons">grade</i></button>
+        <span class="fullscreen" onclick="toggleFullscreen()">🔲</span>
     </div>
 
-    <!-- Modal -->
-    <div id="helpModal" class="modal">
+    <div class="button-container">
+        <button class="timer-button" onclick="startTimer()">Start</button>
+        <button class="timer-button" onclick="resetTimer()">Restart</button>
+        <button class="timer-button" onclick="openSettings()">Adjust</button>
+    </div>
+
+    <div class="bottom-left-container">
+        <div class="upload-button">
+            <label for="file-upload" class="timer-button">Chọn Video/Ảnh</label>
+            <input type="file" id="file-upload" accept="video/*, image/*" onchange="handleFileUpload(event)" style="display: none;">
+        </div>
+        <div class="help-button">
+            <button class="timer-button" onclick="openHelpModal()"><i class="material-icons">grade</i> </button>
+        </div>
+    </div>
+
+    <div id="help-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeHelpModal()">&times;</span>
             <h2>Hướng dẫn sử dụng</h2>
-            <p>Đây là hướng dẫn sử dụng:</p>
+            <p>Đây là hướng dẫn sử dụng.</p>
             <ul>
                 <li>Nhấn "BẮT ĐẦU" để bắt đầu hẹn giờ.</li>
                 <li>Nhấn "RESTART" để khởi động lại hẹn giờ.</li>
@@ -314,111 +316,75 @@
         </div>
     </div>
 
+        </div>
+    </div>
+
     <script>
+        const timerElement = document.getElementById('timer');
         let timer;
-        let timeLeft = 25 * 60;
-        let isRunning = false;
+        let timeLeft = 1500; // 25 minutes in seconds
 
-        function startStopTimer() {
-            if (isRunning) {
-                clearInterval(timer);
-                document.getElementById('start-button').innerText = 'BẮT ĐẦU';
-            } else {
-                timer = setInterval(updateTimer, 1000);
-                document.getElementById('start-button').innerText = 'TẠM DỪNG';
-            }
-            isRunning = !isRunning;
-        }
-
-        function restartTimer() {
+        function startTimer() {
             clearInterval(timer);
-            timeLeft = 25 * 60;
-            document.getElementById('timer').innerText = '25:00';
-            document.getElementById('start-button').innerText = 'BẮT ĐẦU';
-            isRunning = false;
+            timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    alert("Time's up!");
+                } else {
+                    timeLeft--;
+                    updateTimerDisplay();
+                }
+            }, 1000);
         }
 
-        function adjustTime() {
-            let newTime = prompt('Nhập khung thời gian mới (ví dụ: 30:00):', '25:00');
-            if (newTime) {
-                let parts = newTime.split(':');
-                if (parts.length === 2) {
-                    let minutes = parseInt(parts[0]);
-                    let seconds = parseInt(parts[1]);
-                    if (!isNaN(minutes) && !isNaN(seconds)) {
-                        timeLeft = minutes * 60 + seconds;
-                        document.getElementById('timer').innerText = newTime;
-                    }
-                }
-            }
+        function resetTimer() {
+            clearInterval(timer);
+            timeLeft = 1500;
+            updateTimerDisplay();
         }
 
-        function updateTimer() {
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                isRunning = false;
-                document.getElementById('start-button').innerText = 'BẮT ĐẦU';
-                return;
-            }
-
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            document.getElementById('timer').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            timeLeft--;
-        }
-
-        function toggleFullscreen() {
-            const timerContainer = document.getElementById("timer-container");
-            if (!document.fullscreenElement) {
-                if (timerContainer.requestFullscreen) {
-                    timerContainer.requestFullscreen();
-                } else if (timerContainer.mozRequestFullScreen) {
-                    timerContainer.mozRequestFullScreen();
-                } else if (timerContainer.webkitRequestFullscreen) {
-                    timerContainer.webkitRequestFullscreen();
-                } else if (timerContainer.msRequestFullscreen) {
-                    timerContainer.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
         function handleFileUpload(event) {
             const file = event.target.files[0];
-            const video = document.getElementById('background-video');
-            const image = document.getElementById('background-image');
+            const fileUrl = URL.createObjectURL(file);
+            const videoElement = document.getElementById('background-video');
 
-            if (file) {
-                const url = URL.createObjectURL(file);
-                if (file.type.startsWith('video/')) {
-                    video.src = url;
-                    video.style.display = 'block';
-                    image.style.display = 'none';
-                } else if (file.type.startsWith('image/')) {
-                    image.src = url;
-                    image.style.display = 'block';
-                    video.style.display = 'none';
-                }
+            if (file.type.startsWith('video/')) {
+                videoElement.src = fileUrl;
+                videoElement.style.display = 'block';
+            } else if (file.type.startsWith('image/')) {
+                videoElement.style.display = 'none';
+                document.getElementById('timer-container').style.backgroundImage = `url(${fileUrl})`;
+                document.getElementById('timer-container').style.backgroundSize = 'cover';
             }
         }
 
-        // Modal functionality
         function openHelpModal() {
-            document.getElementById('helpModal').style.display = "flex";
+            document.getElementById('help-modal').style.display = 'flex';
         }
 
         function closeHelpModal() {
-            document.getElementById('helpModal').style.display = "none";
+            document.getElementById('help-modal').style.display = 'none';
         }
 
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('helpModal')) {
-                document.getElementById('helpModal').style.display = "none";
+        function toggleFullscreen() {
+            const elem = document.getElementById("timer-container");
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
             }
         }
+
+        // Initial timer display update
+        updateTimerDisplay();
     </script>
 </body>
 </html>
