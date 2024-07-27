@@ -1,0 +1,322 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+.navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.navbar .logo {
+    display: flex;
+    align-items: center;
+}
+.navbar img {
+    height: 70px;
+}
+.navbar .logo span {
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 10px;
+    color: #ffffff;
+}
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.navbar ul li {
+    margin: 0 15px;
+    transition: background-color 0.3s ease;
+}
+.navbar ul li:hover {
+    background-color: #e0e0e0;
+}
+.navbar ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 15px;
+    display: block;
+}
+.navbar ul li .material-icons {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+.navbar .search-bar {
+    flex-grow: 1;
+    margin: 0 20px;
+}
+.navbar .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+.navbar .login-buttons {
+    display: flex;
+    align-items: center;
+}
+.navbar .login-buttons a {
+    margin-left: 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border-radius: 5px;
+}
+.generate-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #1f2937; /* Nền màu xanh đen */
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.generate-button i {
+    margin-right: 2px;
+    font-size: 10px;
+}
+
+.sidebar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 200px;
+    position: fixed;
+    top: 70px;
+    bottom: 0;
+    left: 0;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar ul li {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+.sidebar ul li:hover {
+    background-color: #e0e0e0;
+}
+.sidebar ul li .material-icons {
+    font-size: 20px;
+    margin-right: 10px;
+}
+.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 15px;
+    display: block;
+    width: 100%;
+}
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+}
+.hero {
+    background-color: #7cc242;
+    padding: 40px;
+    text-align: center;
+    border-radius: 10px;
+    position: relative;
+}
+.hero img {
+    height: 200px;
+    width: 190px;
+    position: absolute;
+    top: 10px;
+    left: 280px;
+}
+.hero h1 {
+    color: white;
+    padding-left: 80px;
+    margin: 0;
+}
+
+.hero .search-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hero .search-box {
+    position: relative;
+    width: 300px;
+}
+.hero .search-box input[type="text"] {
+    width: 100%;
+    padding: 10px 40px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+}
+.hero .search-box .search-icon,
+.hero .search-box .voice-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+}
+.hero .search-box .search-icon {
+    left: 10px;
+}
+.hero .search-box .voice-icon {
+    right: -50px;
+    cursor: pointer;
+}
+.hero button {
+    margin-top: 20px;
+    margin-left: 80px;
+    padding: 10px 20px;
+    background-color: #ff6600;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+.cards {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+.card {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
+    width: 200px;
+    border-radius: 10px;
+}
+.card .material-icons {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+.card p {
+    color: #333;
+}
+
+.card img{
+    height: 180px;
+    width: 180px;
+    border-radius: 8%;
+}
+.note {
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.button {
+    background-color: #4CAF50; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 15px 32px; /* Some padding */
+    text-align: center; /* Center the text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make the container an inline block */
+    font-size: 16px; /* Increase font size */
+    margin: 4px 2px; /* Some margin */
+    cursor: pointer; /* Pointer/hand icon */
+    border-radius: 12px; /* Rounded corners */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+}
+
+.button:hover {
+    background-color: #45a049; /* Darker green background on hover */
+    transform: scale(1.1); /* Slightly increase size on hover */
+}
+.button-link {
+    background-color: #4CAF50; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 15px 32px; /* Some padding */
+    text-align: center; /* Center the text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make the container an inline block */
+    font-size: 16px; /* Increase font size */
+    margin: 4px 2px; /* Some margin */
+    cursor: pointer; /* Pointer/hand icon */
+    border-radius: 12px; /* Rounded corners */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+}
+
+.button-link:hover {
+    background-color: #45a049; /* Darker green background on hover */
+    transform: scale(1.1); /* Slightly increase size on hover */
+}
+
+
+
+
+
+
+/* style_index.css */
+
+.iframe-container {
+    margin-left: 220px; /* Adjust this margin to the width of your sidebar */
+    padding: 20px;
+}
+
+.styled-iframe {
+    border: 2px solid #007BFF; /* Blue border */
+    border-radius: 10px; /* Rounded corners */
+    width: 100%;
+    height: 850px; /* Adjust height as needed */
+}
+
+Nguyễn Hiếu
+body {
+    font-family: Arial, sans-serif;
+}
+
+.navbar-brand img {
+    margin-right: 10px;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: #000;
+}
+
+.nav-link img {
+    margin-right: 10px;
+}
+
+.jumbotron {
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.jumbotron img {
+    margin-bottom: 20px;
+}
+
+.jumbotron .form-inline {
+    margin-top: 20px;
+}
+
+.row img {
+    margin-bottom: 10px;
+}
