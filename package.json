@@ -1,12 +1,25 @@
 {
-  "name": "youth-on-hackathon-2024-in_working2",
+  "name": "hackathonproject",
   "version": "1.0.0",
+  "description": "FPT Hackathon 2024",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hieu22012003/hackathonproject.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "bugs": {
+    "url": "https://github.com/hieu22012003/hackathonproject/issues"
+  },
+  "homepage": "https://github.com/hieu22012003/hackathonproject#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mysql2": "^3.11.0"
+  }
 }
