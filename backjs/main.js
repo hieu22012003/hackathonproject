@@ -29,6 +29,3 @@ const updateData = async(username,password,data) => {
         WHERE Username = ? && Pass = ?
     `,[data,username,password])
 }
-
-const query = await showData('person1','test');
-console.log(query);
