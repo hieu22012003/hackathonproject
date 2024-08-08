@@ -3,10 +3,10 @@ import dotenv from 'dotenv'
 dotenv.config();
 
 const conn = mysql.createPool({
-    host: process.env.HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.PASSWORD,
-    database: process.env.DB
+    host: '127.0.0.1',
+    user: 'root',
+    password: '',
+    database: 'db'
 }).promise()
 
 const showAll = async() => {
@@ -29,3 +29,6 @@ const updateData = async(username,password,data) => {
         WHERE Username = ? && Pass = ?
     `,[data,username,password])
 }
+
+const res = await showAll();
+console.log(res);
