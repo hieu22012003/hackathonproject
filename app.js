@@ -14,6 +14,7 @@ app.use('/css',express.static('./css'))
 app.use('/images',express.static('./images'))
 app.use('/frontjs',express.static('./frontjs'))
 app.use('/Video',express.static('/Video'))
+app.use(express.json());
 
 
 
@@ -27,6 +28,12 @@ htmlFiles.forEach((item) => {
     app.get(item,(req,res) => {
         res.sendFile(path.join(__dirname,'public',item.substring(1)));
     })
+})
+
+// get request from quiz.html
+app.post('/quiz.html',(req,res) => {
+    console.log(req.body);
+    res.status(200).send({status: "ok"});
 })
 
 

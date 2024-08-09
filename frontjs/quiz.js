@@ -1,5 +1,4 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { METHODS } from "http";
 
 // const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs";
 const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs";
@@ -104,6 +103,7 @@ var text_0 = '';
     
         // Debugging statement to check the content of final_s
         console.log("final_s:", final_s);
+        postData();
     }
 
     function get() {
@@ -117,10 +117,22 @@ var text_0 = '';
             `;
     }        
 
+
     async function postData(){
-        let temp = JSON.stringify(final_s);
-        const url = "localhost:5500/quiz.html";
-        
+        const url = "http://localhost:5500/quiz.html";
+        const res = await fetch(url,{
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({
+                data: final_s
+            })
+        })
+    }
+
+    async function getData(){
+
     }
 
 
