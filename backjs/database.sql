@@ -9,5 +9,6 @@ CREATE TABLE people(
     User_Data TEXT,
     Number_Of_Test int,
     Avg_Score int,
-    Max_Score int,
+    Max_Score int
 );
+

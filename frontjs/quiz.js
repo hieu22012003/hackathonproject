@@ -1,7 +1,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { METHODS } from "http";
 
 // const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs";
 const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs";
+
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
@@ -114,6 +116,16 @@ var text_0 = '';
                 </div>
             `;
     }        
+
+    async function postData(){
+        let temp = JSON.stringify(final_s);
+        const url = "localhost:5500/quiz.html";
+        
+    }
+
+
+
+
 
     function renderQuiz(quizData) {
         const type1 = document.getElementById('question-type').value;
