@@ -3,6 +3,18 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 // const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs";
 const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs";
 
+let check = localStorage.getItem("check");
+
+if(check === null){
+    const username = prompt("nhap username: ")
+    const password = prompt("nhap password: ")
+    localStorage.setItem("username",username);
+    localStorage.setItem("password",password);
+    localStorage.setItem("check",true);
+}
+
+
+
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
@@ -103,7 +115,6 @@ var text_0 = '';
     
         // Debugging statement to check the content of final_s
         console.log("final_s:", final_s);
-        postData();
     }
 
     function get() {
@@ -118,7 +129,7 @@ var text_0 = '';
     }        
 
 
-    async function postData(){
+    async function postData(score){
         const url = "http://localhost:5500/quiz.html";
         const res = await fetch(url,{
             method: 'POST',
@@ -126,16 +137,35 @@ var text_0 = '';
                 'Content-Type' : 'application/json'
             },
             body: JSON.stringify({
-                data: final_s
+                data: {
+                    id: {"username":localStorage.getItem("username"),"password":localStorage.getItem("password")},
+                    User_Data: final_s,
+                    User_Score: score
+                }
             })
         })
     }
 
     async function getData(){
+        const url = "http://localhost:5500/history";
+        console.log(url);
+        const res = await fetch(url,{
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({
+                id : {
+                    "username" : localStorage.getItem("username") ,
+                    "password": localStorage.getItem("password")
+                }
+            })
+        })
 
+        window.location.href = "http://localhost:5500/history";
+        // const data = res.json();
+        // console.log(data);
     }
-
-
 
 
 
@@ -390,6 +420,7 @@ function scoreQuiz() {
     let resultString =''
 
     const score = (correctCount / totalQuestions) * 10;
+    postData(score);
     document.getElementById('score').textContent = score.toFixed(2);
 
     if (incorrectQuestions.length > 0) {
@@ -467,6 +498,9 @@ document.getElementById('get').addEventListener('click', get);
 document.getElementById('submit').addEventListener('click', run);
 
 document.getElementById('calculate-score').addEventListener('click', scoreQuiz);
+
+const historyBtn = document.getElementById('history')
+historyBtn.addEventListener('click',getData);
 
 
 function rating() {

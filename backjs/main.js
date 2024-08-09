@@ -21,20 +21,13 @@ const showData = async(username,password) => {
     return res[0];
 }
 
-const createUser = async(username,password,avgScore,maxScore) => {
-    await conn.query(`INSERT INTO people (Username,Pass,User_Data,Number_Of_Test,Avg_Score,Max_Score) VALUES (?,?)`,[username,password,0,avgScore,maxScore]);
+const createUser = async(username,password,userData,score) => {
+    await conn.query(`INSERT INTO people (Username,Pass,User_Data,Score) VALUES (?,?,?,?)`,[username,password,userData,score]);
 }
 
-const updateData = async(username,password,data,numberOfQuiz,avgScore,maxScore) => {
-    await conn.query(`UPDATE people
-        SET User_Data = ?, Number_Of_Test = ?, Avg_Score = ?, Max_Score = ?
-        WHERE Username = ? && Pass = ?
-    `,[data,numberOfQuiz,avgScore,maxScore,username,password]);
-}
 
 const res = await showData("person1","hellp");
+console.log(res);
 
-console.log(res.length === 0);
 
-
-export {showAll,showData,createUser,updateData};
+export {showAll,showData,createUser};
