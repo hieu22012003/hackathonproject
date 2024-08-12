@@ -11,23 +11,31 @@ const conn = mysql.createPool({
     port: process.env.PORT
 }).promise()
 
-const showAll = async() => {
-    const res = await conn.query("SELECT * FROM people")
-    return res[0];
+
+const createUser = async(username,password) => {
+    await conn.query(`INSERT INTO people(Username,Pass) 
+        VALUES(?,?)`,[username,password]);
 }
 
-const showData = async(username,password) => {
-    const res = await conn.query(`SELECT * FROM people WHERE Username = ? && Pass = ?`,[username,password]);
-    return res[0];
+const findUser = async(username,password) => {
+    const [res] = await conn.query(`SELECT * FROM people
+        WHERE Username = ? && Pass = ?`,[username,password])
+    if(res.length === 0) return -1;
+    return res[0].PersonId; 
 }
 
-const createUser = async(username,password,userData,score) => {
-    await conn.query(`INSERT INTO people (Username,Pass,User_Data,Score) VALUES (?,?,?,?)`,[username,password,userData,score]);
+const findUserData = async(id) => {
+    const [res] = await conn.query(`SELECT * FROM userData
+        WHERE PersonId = ?`,[id])
+    return res;
+}
+
+const addNewData = async(PersonId,User_Data,Score,Number_Of_Questions,Correct_Questions) => {
+    await conn.query(`INSERT INTO userData(PersonID,User_Data,Score,Number_Of_Questions,Correct_Questions)
+        Values(?,?,?,?,?)`,[PersonId,User_Data,Score,Number_Of_Questions,Correct_Questions]);
 }
 
 
-const res = await showData("person1","hellp");
-console.log(res);
 
+export {findUser,findUserData,addNewData,createUser};
 
-export {showAll,showData,createUser};

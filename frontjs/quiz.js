@@ -44,6 +44,7 @@ var text_0 = '';
         const pre_prompts = [
             `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có dựa theo nội dung hoặc chủ đề là: ${promptContent}. Trong 4 đáp án của từng câu, chỉ có 1 đáp án true và 3 đáp án false. Đáp án true là ngẫu nhiên trong 4 đáp án 1, 2, 3, 4. Cấu trúc nó sẽ nên như này (và chỉ promt ra nội dung câu hỏi dựa theo cấu trúc, ko nên thêm bất cứ thông tin nào khác, không thêm lưu ý, không thêm tiêu đề):
             [
+                {subject: "môn học"}
                 { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true }, { text: "Đáp án 2", correct: false }, { text: "Đáp án 3", correct: false }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: false }, { text: "Đáp án 2", correct: true }, { text: "Đáp án 3", correct: false }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: false }, { text: "Đáp án 2", correct: false }, { text: "Đáp án 3", correct: true }, { text: "Đáp án 4", correct: false } ] },
@@ -51,6 +52,7 @@ var text_0 = '';
     
             `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có dựa theo nội dung hoặc chủ đề là: ${promptContent}. Trong 4 đáp án của từng câu, có ít nhất 1 đáp án sai và ít nhất 2 đáp án đúng. Đáp án đúng sẽ được sắp xếp ngẫu nhiên trong 4 đáp án. Cấu trúc câu hỏi như sau (chỉ in ra nội dung câu hỏi theo cấu trúc này, không thêm bất cứ thông tin nào khác, không thêm lưu ý, không thêm tiêu đề):
             [
+                {subject: "môn học"}
                 { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true }, { text: "Đáp án 2", correct: true }, { text: "Đáp án 3", correct: false }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true }, { text: "Đáp án 2", correct: false }, { text: "Đáp án 3", correct: true }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: false }, { text: "Đáp án 2", correct: true }, { text: "Đáp án 3", correct: true }, { text: "Đáp án 4", correct: false } ] }
@@ -58,6 +60,7 @@ var text_0 = '';
     
             `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, dựa trên nội dung hoặc chủ đề là: ${promptContent}. Mỗi câu có ít nhất 1 đáp án sai và ít nhất 2 đáp án đúng, được phân bố ngẫu nhiên trong 4 đáp án. Cấu trúc dữ liệu như sau (chỉ xuất nội dung câu hỏi theo cấu trúc này, không thêm thông tin khác):
             [
+                {subject: "môn học"}
                 { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true }, { text: "Đáp án 2", correct: false }, { text: "Đáp án 3", correct: true }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true }, { text: "Đáp án 2", correct: true }, { text: "Đáp án 3", correct: false }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: false }, { text: "Đáp án 2", correct: true }, { text: "Đáp án 3", correct: true }, { text: "Đáp án 4", correct: false } ] }
@@ -90,16 +93,16 @@ var text_0 = '';
             text_0 = final_s;
         } else {
             const chat = model.startChat({
-                history: [
+                "contents": [
                     {
                         role: "user",
-                        parts: [{ text: prompt_0 }],
+                        parts: [{ "text": prompt_0 }],
                     },
                     {
                         role: "model",
-                        parts: [{ text:text_0 }],
+                        parts: [{ "text":text_0 }],
                     },
-                ],
+                ]
             });
     
             const msg = document.getElementById('prompt').value;
@@ -129,7 +132,7 @@ var text_0 = '';
     }        
 
 
-    async function postData(score){
+    async function postData(score,correctQuestion,totalQuestions){
         const url = "http://localhost:5500/quiz.html";
         const res = await fetch(url,{
             method: 'POST',
@@ -140,7 +143,9 @@ var text_0 = '';
                 data: {
                     id: {"username":localStorage.getItem("username"),"password":localStorage.getItem("password")},
                     User_Data: final_s,
-                    User_Score: score
+                    User_Score: score,
+                    User_Correct: correctQuestion,
+                    User_Total: totalQuestions
                 }
             })
         })
@@ -420,7 +425,7 @@ function scoreQuiz() {
     let resultString =''
 
     const score = (correctCount / totalQuestions) * 10;
-    postData(score);
+    // postData(score);
     document.getElementById('score').textContent = score.toFixed(2);
 
     if (incorrectQuestions.length > 0) {
@@ -499,8 +504,8 @@ document.getElementById('submit').addEventListener('click', run);
 
 document.getElementById('calculate-score').addEventListener('click', scoreQuiz);
 
-const historyBtn = document.getElementById('history')
-historyBtn.addEventListener('click',getData);
+// const historyBtn = document.getElementById('history')
+// historyBtn.addEventListener('click',getData);
 
 
 function rating() {

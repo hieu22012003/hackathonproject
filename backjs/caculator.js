@@ -1,8 +1,8 @@
-import {showAll,showData,createUser} from "./main.js"
+import {findUser,findUserData,addNewData,createUser} from "./main.js"
 
 
-const avgScore = async(username,password) => {
-    const userData = await showData(username,password);
+const avgScore = async(id) => {
+    const userData = await findUserData(id);
     const numberOfTest = userData.length;
     let sum = 0;
     userData.forEach(item => {
@@ -11,8 +11,8 @@ const avgScore = async(username,password) => {
     return sum/numberOfTest;
 }
 
-const maxScore = async (username,password) => {
-    const userData = await showData(username,password);
+const maxScore = async (id) => {
+    const userData = await findUserData(id);
     let mx = 0;
     userData.forEach(item => {
         mx = Math.max(mx,item.Score)
