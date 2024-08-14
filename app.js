@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {findUser,findUserData,addNewData,createUser}from './backjs/main.js'
-import { avgScore, maxScore } from './backjs/caculator.js';
+import { percentScore } from './backjs/caculator.js';
 const app = express()
 
 const __filename = fileURLToPath(import.meta.url)
@@ -23,7 +23,7 @@ app.get(['/','/index.html'],(req,res) => {
     res.sendFile(path.join(__dirname,'public','index.html'));
 })
 
-const htmlFiles = ['/quiz.html','/pomodoro.html','/File_Upload.html'];
+const htmlFiles = ['/quiz.html','/pomodoro.html','/File_Upload.html','/history.html'];
 htmlFiles.forEach((item) => {
     app.get(item,(req,res) => {
         res.sendFile(path.join(__dirname,'public',item.substring(1)));
@@ -37,26 +37,67 @@ htmlFiles.forEach((item) => {
 app.post('/quiz.html',async (req,res) => {
 
     //get req data
-    
+    const userReqBack = req.body.data;
+    const username = userReqBack.id.username;
+    const password = userReqBack.id.password;
+    const userData = userReqBack.User_Data;
+    const correctAns = userReqBack.User_Correct;
+    const totalQues = userReqBack.User_Total;
+    const score = userReqBack.User_Score;
 
 
-    // req database , get user info, create new records
+    console.log(username,password,userData,correctAns,totalQues,score);
+
+    let checkUser = await findUser(username,password);
+
+    // check if user exist
+    if(checkUser === -1){
+        // create va tim lai id user
+        await createUser(username,password);
+        checkUser = await findUser(username,password);
+        addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns)
+
+    }else{
+        addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns)
+    }
 
 })
 
 
 
-// send data back;
+// get username and pass
 let reqDataBack2;
-app.post('/history', (req,res) => {
+app.post('/history.html', (req,res) => {
     res.send('<h1>hello</h1>');
     reqDataBack2 = req.body.id;
     console.log(reqDataBack2)
 })
 
+
+//send user data back
 app.get('/history',async (req,res) => {
-    // res.send(`<h1>Hello</h1>`)
-    res.status(200).send(resData);
+    if(typeof reqDataBack2 == "undefined")return;
+    const username = reqDataBack2.username;
+    const password = reqDataBack2.password;
+    const scoreByPercent = []
+
+    // check if user exit
+    let id = await findUser(username,password)
+    if(id === -1) return;
+    const userData = await findUserData(id);
+    if(userData.length === 0)return;
+
+
+    // caculate percent correct
+    userData.forEach(item => {
+        let temp = percentScore(item.Number_Of_Question,item.Correct_Questions)
+        scoreByPercent.push(temp);
+    })
+    // console.log(scoreByPercent);
+    
+    //send userdata back
+    userData.push({percenScore: scoreByPercent});
+    res.status(200).send(userData);
 })
 // server port
-app.listen(5500,() => console.log('server listening at port 5500'))
+app.listen(5500,() => console.log('server listening at port 5500'));

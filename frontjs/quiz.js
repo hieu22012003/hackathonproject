@@ -44,7 +44,7 @@ var text_0 = '';
         const pre_prompts = [
             `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có dựa theo nội dung hoặc chủ đề là: ${promptContent}. Trong 4 đáp án của từng câu, chỉ có 1 đáp án true và 3 đáp án false. Đáp án true là ngẫu nhiên trong 4 đáp án 1, 2, 3, 4. Cấu trúc nó sẽ nên như này (và chỉ promt ra nội dung câu hỏi dựa theo cấu trúc, ko nên thêm bất cứ thông tin nào khác, không thêm lưu ý, không thêm tiêu đề):
             [
-                {subject: "môn học"}
+                {subject: "Môn học",class: "Lớp mấy"},
                 { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true }, { text: "Đáp án 2", correct: false }, { text: "Đáp án 3", correct: false }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: false }, { text: "Đáp án 2", correct: true }, { text: "Đáp án 3", correct: false }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: false }, { text: "Đáp án 2", correct: false }, { text: "Đáp án 3", correct: true }, { text: "Đáp án 4", correct: false } ] },
@@ -52,7 +52,7 @@ var text_0 = '';
     
             `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có dựa theo nội dung hoặc chủ đề là: ${promptContent}. Trong 4 đáp án của từng câu, có ít nhất 1 đáp án sai và ít nhất 2 đáp án đúng. Đáp án đúng sẽ được sắp xếp ngẫu nhiên trong 4 đáp án. Cấu trúc câu hỏi như sau (chỉ in ra nội dung câu hỏi theo cấu trúc này, không thêm bất cứ thông tin nào khác, không thêm lưu ý, không thêm tiêu đề):
             [
-                {subject: "môn học"}
+                {subject: "Môn học"},
                 { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true }, { text: "Đáp án 2", correct: true }, { text: "Đáp án 3", correct: false }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true }, { text: "Đáp án 2", correct: false }, { text: "Đáp án 3", correct: true }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: false }, { text: "Đáp án 2", correct: true }, { text: "Đáp án 3", correct: true }, { text: "Đáp án 4", correct: false } ] }
@@ -60,7 +60,7 @@ var text_0 = '';
     
             `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, dựa trên nội dung hoặc chủ đề là: ${promptContent}. Mỗi câu có ít nhất 1 đáp án sai và ít nhất 2 đáp án đúng, được phân bố ngẫu nhiên trong 4 đáp án. Cấu trúc dữ liệu như sau (chỉ xuất nội dung câu hỏi theo cấu trúc này, không thêm thông tin khác):
             [
-                {subject: "môn học"}
+                {subject: "Môn học"},
                 { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true }, { text: "Đáp án 2", correct: false }, { text: "Đáp án 3", correct: true }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true }, { text: "Đáp án 2", correct: true }, { text: "Đáp án 3", correct: false }, { text: "Đáp án 4", correct: false } ] },
                 { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: false }, { text: "Đáp án 2", correct: true }, { text: "Đáp án 3", correct: true }, { text: "Đáp án 4", correct: false } ] }
@@ -117,10 +117,11 @@ var text_0 = '';
         console.log(prompt);
     
         // Debugging statement to check the content of final_s
-        console.log("final_s:", final_s);
+        // console.log("final_s:", final_s);
     }
 
     function get() {
+        console.log("final_s: ",final_s);
         renderQuiz(final_s);
         document.getElementById('before-result').innerHTML += `
                 <div style="text-align: center;" id="container">
@@ -151,26 +152,11 @@ var text_0 = '';
         })
     }
 
-    async function getData(){
-        const url = "http://localhost:5500/history";
-        console.log(url);
-        const res = await fetch(url,{
-            method: 'POST',
-            headers: {
-                'Content-Type' : 'application/json'
-            },
-            body: JSON.stringify({
-                id : {
-                    "username" : localStorage.getItem("username") ,
-                    "password": localStorage.getItem("password")
-                }
-            })
-        })
-
-        window.location.href = "http://localhost:5500/history";
-        // const data = res.json();
-        // console.log(data);
+    async function getInfoData() {
+        const url = "http://localhost:5500/history.html"
+        window.location.href = url;
     }
+
 
 
 
@@ -181,11 +167,12 @@ var text_0 = '';
     
         if (type1 === "Multiple Response") {
             quizData.forEach((quiz, quizIndex) => {
+                if(quizIndex == 0)return;
                 const quizDiv = document.createElement('div');
                 quizDiv.classList.add('quiz');
     
                 const quizTitle = document.createElement('h3');
-                quizTitle.textContent = `Question ${quizIndex + 1}: ${quiz.question}`;
+                quizTitle.textContent = `Question ${quizIndex}: ${quiz.question}`;
                 quizDiv.appendChild(quizTitle);
     
                 const answersDiv = document.createElement('div');
@@ -239,11 +226,12 @@ var text_0 = '';
             });
         } else if (type1 === "Multiple Choice") {
             quizData.forEach((quiz, quizIndex) => {
+                if(quizIndex == 0)return;
                 const quizDiv = document.createElement('div');
                 quizDiv.classList.add('quiz');
     
                 const quizTitle = document.createElement('h3');
-                quizTitle.textContent = `Question ${quizIndex + 1}: ${quiz.question}`;
+                quizTitle.textContent = `Question ${quizIndex}: ${quiz.question}`;
                 quizDiv.appendChild(quizTitle);
     
                 const answersDiv = document.createElement('div');
@@ -296,11 +284,12 @@ var text_0 = '';
             });
         } else if (type1 =="True or False") {
             quizData.forEach((quiz, quizIndex) => {
+                if(quizIndex == 0)return;
                 const quizDiv = document.createElement('div');
                 quizDiv.classList.add('quiz');
               
                 const quizTitle = document.createElement('h3');
-                quizTitle.textContent = `Question ${quizIndex + 1}: ${quiz.question}`;
+                quizTitle.textContent = `Question ${quizIndex}: ${quiz.question}`;
                 quizDiv.appendChild(quizTitle);
               
                 const answersDiv = document.createElement('div');
@@ -401,6 +390,7 @@ function scoreQuiz() {
         const answerInputs = quizDiv.querySelectorAll('input');
 
         answerInputs.forEach((input, answerIndex) => {
+            // if(answerIndex == 0)return;
             if (input.checked) {
                 selectedAnswers.push(answerIndex);
             }
@@ -408,10 +398,10 @@ function scoreQuiz() {
 
         let correct = false;
         if (type1 === "Multiple Response") {
-            const correctAnswers = final_s[quizIndex].answers.filter(answer => answer.correct).map((answer, index) => index);
+            const correctAnswers = final_s[quizIndex+1].answers.filter(answer => answer.correct).map((answer, index) => index);
             correct = correctAnswers.length === selectedAnswers.length && correctAnswers.every(index => selectedAnswers.includes(index));
         } else {
-            const correctAnswerIndex = final_s[quizIndex].answers.findIndex(answer => answer.correct);
+            const correctAnswerIndex = final_s[quizIndex+1].answers.findIndex(answer => answer.correct);
             correct = selectedAnswers.length === 1 && selectedAnswers[0] === correctAnswerIndex;
         }
 
@@ -425,7 +415,7 @@ function scoreQuiz() {
     let resultString =''
 
     const score = (correctCount / totalQuestions) * 10;
-    // postData(score);
+    postData(score,correctCount,totalQuestions);
     document.getElementById('score').textContent = score.toFixed(2);
 
     if (incorrectQuestions.length > 0) {
@@ -504,8 +494,8 @@ document.getElementById('submit').addEventListener('click', run);
 
 document.getElementById('calculate-score').addEventListener('click', scoreQuiz);
 
-// const historyBtn = document.getElementById('history')
-// historyBtn.addEventListener('click',getData);
+const historyBtn = document.getElementById('history')
+historyBtn.addEventListener('click',getInfoData);
 
 
 function rating() {
