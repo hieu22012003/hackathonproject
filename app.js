@@ -83,20 +83,25 @@ app.get('/history',async (req,res) => {
 
     // check if user exit
     let id = await findUser(username,password)
-    if(id === -1) return;
+    if(id === -1){
+        res.status(200).send([]);
+        return;
+    }
     const userData = await findUserData(id);
-    if(userData.length === 0)return;
+    if(userData.length === 0){
+        res.status(200).send([]);
+        return
+    }
 
 
     // caculate percent correct
     userData.forEach(item => {
         let temp = percentScore(item.Number_Of_Question,item.Correct_Questions)
-        scoreByPercent.push(temp);
+        scoreByPercent.push(temp.toFixed(2));
     })
-    // console.log(scoreByPercent);
     
     //send userdata back
-    userData.push({percenScore: scoreByPercent});
+    userData.push({percentScore: scoreByPercent});
     res.status(200).send(userData);
 })
 // server port
