@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import {findUser,findUserData,addNewData,createUser}from './backjs/main.js'
+import {findUser,findUserData,addNewData,createUser, findDataId}from './backjs/main.js'
 import { percentScore } from './backjs/caculator.js';
 const app = express()
 
@@ -44,9 +44,11 @@ app.post('/quiz.html',async (req,res) => {
     const correctAns = userReqBack.User_Correct;
     const totalQues = userReqBack.User_Total;
     const score = userReqBack.User_Score;
+    const userQues = userReqBack.User_Questions;
+    const AI_Res = userReqBack.AI_res;
 
 
-    console.log(username,password,userData,correctAns,totalQues,score);
+    console.log(userReqBack);
 
     let checkUser = await findUser(username,password);
 
@@ -55,10 +57,11 @@ app.post('/quiz.html',async (req,res) => {
         // create va tim lai id user
         await createUser(username,password);
         checkUser = await findUser(username,password);
-        addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns)
+
+        addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns,userQues,AI_Res)
 
     }else{
-        addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns)
+        addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns,userQues,AI_Res)
     }
 
 })
@@ -104,5 +107,23 @@ app.get('/history',async (req,res) => {
     userData.push({percentScore: scoreByPercent});
     res.status(200).send(userData);
 })
+
+
+
+//get single history id
+app.get('/history.html/:id',async(req,res) => {
+   const id = req.params.id
+   const responseData = await findDataId(id);
+   res.status(200).send(responseData)
+})
+
+
+
+
+app.get('*', (req,res) => {
+    res.status(404).send('Page not found');
+})
+
+
 // server port
 app.listen(5500,() => console.log('server listening at port 5500'));

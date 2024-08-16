@@ -26,6 +26,15 @@ const createNewTableLayout = () => {
     return storage;
 }
 
+
+
+// change url when click
+const urlChange = (id) => {
+    window.location.href = "http://localhost:5500/history.html/" + id;
+}
+
+
+
 // create new element data
 const createElement = (arr) => {
     const elements = createNewTableLayout();
@@ -68,26 +77,38 @@ const createElement = (arr) => {
     let nodeLeft = document.createTextNode(arr[5]);
     pLeft.appendChild(nodeLeft)
 
+    let pMid = document.createElement("p") // middle
+    pMid.setAttribute('class','middle')
+    let nodeMid = document.createTextNode(arr[6])
+    pMid.appendChild(nodeMid)
+
     let pRight = document.createElement("p") // right
     pRight.setAttribute('class','right');
-    let nodeRight = document.createTextNode(arr[6])
+    let nodeRight = document.createTextNode(arr[7])
     pRight.appendChild(nodeRight)
 
 
     text.appendChild(pLeft);
+    text.appendChild(pMid);
     text.appendChild(pRight);
 
 
     list.appendChild(text); // append text to list
     list.appendChild(info);
     historyList.appendChild(list)// append list to historyList
+    historyList.setAttribute('id',arr[8]); // set id to data id
+
+    // append to allcontent
     allContent[0].appendChild(historyList)// .... 
 
-    console.log(list);
-    console.log(text);
-    console.log(historyList)
+
+    // change url when click
+    const id = historyList.getAttribute('id');
+    const changeUrl = document.getElementById(id);
+    changeUrl.addEventListener('click',() => urlChange(id));
 
 }
+
 
 
 //get data from server
@@ -99,6 +120,7 @@ const getData = async() => {
     responseData = await res.json();
     console.log(responseData)
 }
+
 
 // post data
 const postData = async() => {
@@ -121,6 +143,9 @@ const postData = async() => {
 await postData();
 await getData();
 
+
+
+
 // renderData from json
 const renderData = () => {
 
@@ -138,13 +163,19 @@ const renderData = () => {
         let wrong = (total-correct).toString(); 
         let percent = percentScore[index]+"%";
         let score = item.Score.toString() + "/10";
+        let userQues = item.User_Question;
+        let id = item.DataId;
+
+        if(userQues.length > 33) userQues = "..." + userQues.substring(userQues.length-33); 
 
 
 
         // create new element
         createElement([total,correct,wrong,percent,score,
-            userData[0].class,userData[0].subject]);
+            userData[0].class,userQues,userData[0].subject,id]);
     })
 }
+
+
 
 renderData();

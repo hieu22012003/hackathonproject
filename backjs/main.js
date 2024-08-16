@@ -30,10 +30,18 @@ const findUserData = async(id) => {
     return res;
 }
 
-const addNewData = async(PersonId,User_Data,Score,Number_Of_Question,Correct_Questions) => {
-    await conn.query(`INSERT INTO userData (PersonID,User_Data,Score,Number_Of_Question,Correct_Questions)
-        VALUES(?,?,?,?,?)`,[PersonId,User_Data,Score,Number_Of_Question,Correct_Questions]);
+const addNewData = async(PersonId,User_Data,Score,Number_Of_Question,Correct_Questions,User_Question,AI_res) => {
+    await conn.query(`INSERT INTO userData (PersonID,User_Data,Score,Number_Of_Question,Correct_Questions,User_Question,AI_Res)
+        VALUES(?,?,?,?,?,?,?)`,[PersonId,User_Data,Score,Number_Of_Question,Correct_Questions,User_Question,AI_res]);
 }
 
-export {findUser,findUserData,addNewData,createUser};
+const findDataId = async(id) => {
+    const [res] = await conn.query(`SELECT * FROM userData
+        WHERE DataId = ?`,[id]);
+    return res;
+}
+
+
+
+export {findUser,findUserData,addNewData,createUser,findDataId};
 
