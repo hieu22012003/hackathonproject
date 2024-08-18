@@ -1,8 +1,9 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import {findUser,findUserData,addNewData,createUser, findDataId}from './backjs/main.js'
+import {findUser,findUserData,addNewData,createUser, findDataId, findColumnPerson}from './backjs/main.js'
 import { percentScore } from './backjs/caculator.js';
+import { sendEmail } from './backjs/email.js';
 const app = express()
 
 const __filename = fileURLToPath(import.meta.url)
@@ -40,6 +41,7 @@ app.post('/quiz.html',async (req,res) => {
     const userReqBack = req.body.data;
     const username = userReqBack.id.username;
     const password = userReqBack.id.password;
+    const email = userReqBack.id.email;
     const userData = userReqBack.User_Data;
     const correctAns = userReqBack.User_Correct;
     const totalQues = userReqBack.User_Total;
@@ -55,7 +57,7 @@ app.post('/quiz.html',async (req,res) => {
     // check if user exist
     if(checkUser === -1){
         // create va tim lai id user
-        await createUser(username,password);
+        await createUser(username,password,email);
         checkUser = await findUser(username,password);
 
         addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns,userQues,AI_Res)
@@ -124,6 +126,19 @@ app.get('*', (req,res) => {
     res.status(404).send('Page not found');
 })
 
+
+
+//get email
+const getEmailAdr = async () => {
+    const res = await findColumnPerson('Email');
+    res.forEach(async (item) => {
+        await sendEmail(item.Email);
+    })
+}
+
+
+// send email per day
+// const sendPerDay =  setInterval(getEmailAdr,60000)
 
 // server port
 app.listen(5500,() => console.log('server listening at port 5500'));

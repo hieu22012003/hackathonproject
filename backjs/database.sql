@@ -4,7 +4,8 @@ USE db
 CREATE TABLE people(
     PersonId int PRIMARY KEY AUTO_INCREMENT,
     Username TEXT NOT NULL,
-    Pass TEXT NOT NULL
+    Pass TEXT NOT NULL,
+    Email TEXT NOT NULL
 )
 
 CREATE TABLE userData(

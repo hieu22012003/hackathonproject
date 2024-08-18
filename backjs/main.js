@@ -12,9 +12,9 @@ const conn = mysql.createPool({
 }).promise()
 
 
-const createUser = async(username,password) => {
-    await conn.query(`INSERT INTO people(Username,Pass) 
-        VALUES(?,?)`,[username,password]);
+const createUser = async(username,password,email) => {
+    await conn.query(`INSERT INTO people(Username,Pass,Email) 
+        VALUES(?,?,?)`,[username,password,email]);
 }
 
 const findUser = async(username,password) => {
@@ -42,6 +42,12 @@ const findDataId = async(id) => {
 }
 
 
+/// find Column this one just for backend and server
+const findColumnPerson = async(column) => {
+    const [res] = await conn.query(`SELECT ${column} FROM people`);
+    return res;
+}
 
-export {findUser,findUserData,addNewData,createUser,findDataId};
+
+export {findUser,findUserData,addNewData,createUser,findDataId,findColumnPerson};
 

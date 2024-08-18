@@ -5,11 +5,13 @@ const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs";
 
 let check = localStorage.getItem("check");
 let userQues = "";
-if(check === null){
+if(check == null){
     const username = prompt("nhap username: ")
     const password = prompt("nhap password: ")
+    const Email = prompt("Nhap email")
     localStorage.setItem("username",username);
     localStorage.setItem("password",password);
+    localStorage.setItem("email",Email)
     localStorage.setItem("check",true);
 }
 
@@ -144,7 +146,11 @@ var text_0 = '';
             // convert json to string
             body: JSON.stringify({
                 data: {
-                    id: {"username":localStorage.getItem("username"),"password":localStorage.getItem("password")},
+                    id: {
+                        "username":localStorage.getItem("username"),
+                        "password":localStorage.getItem("password"),
+                        "email": localStorage.getItem('email')
+                    },
                     User_Data: final_s,
                     User_Score: score,
                     User_Correct: correctQuestion,
@@ -447,16 +453,13 @@ function scoreQuiz() {
                 history: [
                     {
                         role: "user",
-                        parts: [{ text: "Dựa trên các thông tin sau đây, hãy viết một nhận xét chi tiết về tình hình học tập của học sinh. Hãy khuyến khích học sinh cải thiện điểm yếu của mình. Bài nhận xét nên dài ít nhất 500 từ. Dưới đây là danh sách các câu hỏi và câu trả lời sai của học sinh dưới dạng file JSON" }], 
+                        parts: [{ text: "Dựa trên các thông tin sau đây, hãy viết một nhận xét về điểm cần cải thiện của học sinh. Hãy khuyến khích học sinh cải thiện điểm yếu của mình. Bài nhận xét nên dài ít nhất 500 từ. Dưới đây là danh sách các câu hỏi và câu trả lời sai của học sinh dưới dạng file JSON" }], 
                     },    
                     {
                         role: "model",
-                        parts: [{ text: `Tôi sẽ nhận xét với tư cách là một giáo viên bộ môn. 
+                        parts: [{ text: `Tôi sẽ nhận xét với tư cách là một giáo viên bộ môn và chỉ nhận xét đúng điểm cần cải thiện không nhận xét gì khác.
                             Tôi sẽ:
-                            1. Đánh giá tổng quan tình hình học tập của học sinh.
-                            2. Nêu ra những điểm mạnh và điểm yếu của học sinh.
-                            3. Cung cấp các kiến thức cần thiết và phương pháp học tập để cải thiện điểm số.
-                            4. Tạo một lịch trình học tập phù hợp với tình hình hiện tại.` }],
+                            Nêu ra những điểm học sinh cần cải thiện.` }],
                         },
                     ],
                     generationConfig : {

@@ -105,6 +105,7 @@
     border: 2px solid #478CCFC4;
     padding-bottom: 25px;
     margin-bottom: 25px;
+    cursor: pointer;
 }
 
 .text{

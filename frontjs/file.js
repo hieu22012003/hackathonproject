@@ -82,6 +82,7 @@ async function run() {
     
         `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có dựa theo nội dung hoặc chủ đề là: ${fileContent}. Trong 4 đáp án của từng câu, chỉ có 1 đáp án true và 3 đáp án false. Đáp án true là ngẫu nhiên trong 4 đáp án 1, 2, 3, 4. Cấu trúc nó sẽ nên như này (và chỉ promt ra nội dung câu hỏi dựa theo cấu trúc, ko nên thêm bất cứ thông tin nào khác, không thêm lưu ý, không thêm tiêu đề):
         [
+            {subject: "Môn học",class: "Lớp ..."},
             { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] },
             { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] },
             { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] },
@@ -89,6 +90,7 @@ async function run() {
 
         `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có dựa theo nội dung hoặc chủ đề là: ${fileContent}. Trong 4 đáp án của từng câu, có ít nhất 1 đáp án sai và ít nhất 2 đáp án đúng. Đáp án đúng sẽ được sắp xếp ngẫu nhiên trong 4 đáp án. Cấu trúc câu hỏi như sau (chỉ in ra nội dung câu hỏi theo cấu trúc này, không thêm bất cứ thông tin nào khác, không thêm lưu ý, không thêm tiêu đề):
         [
+            {subject: "Môn học",class: "Lớp ..."},
             { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] },
             { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] },
             { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] }
@@ -96,6 +98,7 @@ async function run() {
 
         `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, dựa trên nội dung hoặc chủ đề là: ${fileContent}. Mỗi câu có ít nhất 1 đáp án sai và ít nhất 2 đáp án đúng, được phân bố ngẫu nhiên trong 4 đáp án. Cấu trúc dữ liệu như sau (chỉ xuất nội dung câu hỏi theo cấu trúc này, không thêm thông tin khác):
         [
+            {subject: "Môn học",class: "Lớp .."},
             { question: "Câu hỏi 1", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] },
             { question: "Câu hỏi 2", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] },
             { question: "Câu hỏi 3", answers: [ { text: "Đáp án 1", correct: true or false }, { text: "Đáp án 2", correct: true or false }, { text: "Đáp án 3", correct: true or false }, { text: "Đáp án 4", correct: true or false } ] }
@@ -142,6 +145,7 @@ function renderQuiz(quizData) {
     console.log(quizData);
     if (type1 === "Multiple Response") {
         quizData.forEach((quiz, quizIndex) => {
+            if(quizIndex == 0)return;
             const quizDiv = document.createElement('div');
             quizDiv.classList.add('quiz');
 
@@ -199,6 +203,7 @@ function renderQuiz(quizData) {
         });
     } else if (type1 === "Multiple Choice") {
         quizData.forEach((quiz, quizIndex) => {
+            if(quizIndex == 0)return ;
             const quizDiv = document.createElement('div');
             quizDiv.classList.add('quiz');
 
@@ -254,6 +259,7 @@ function renderQuiz(quizData) {
         });
     } else if (type1 === "True or False") {
         quizData.forEach((quiz, quizIndex) => {
+            if(quizIndex == 0)return;
             const quizDiv = document.createElement('div');
             quizDiv.classList.add('quiz');
 
@@ -321,6 +327,43 @@ function renderQuiz(quizData) {
 }
 
 
+// post data
+async function postData(score,correctQuestion,totalQuestions,userQues,content){
+    const url = "http://localhost:5500/quiz.html";
+    const res = await fetch(url,{
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        // convert json to string
+        body: JSON.stringify({
+            data: {
+                id: {
+                    "username":localStorage.getItem("username"),
+                    "password":localStorage.getItem("password"),
+                    "email": localStorage.getItem('email')
+                },
+                User_Data: final_s,
+                User_Score: score,
+                User_Correct: correctQuestion,
+                User_Total: totalQuestions,
+                User_Questions: userQues,
+                AI_res: content
+            }
+        })
+    })
+}
+
+// change url when click
+async function urlChange() {
+    const url = "http://localhost:5500/history.html"
+    window.location.href = url;
+}
+
+
+
+
+
 function cleanJsonString(json) {
     console.log('Original JSON:', json);
     json = json.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -334,6 +377,127 @@ function cleanJsonString(json) {
     }
 }
 
+
+
+// caculate score
+function scoreQuiz() {
+    if (!final_s || final_s.length === 0) {
+        alert("Please generate the quiz first!");
+        return;
+    }
+
+    const type1 = document.getElementById('question-type').value;
+    const allQuizDivs = document.querySelectorAll('.quiz');
+    let correctCount = 0;
+    let totalQuestions = allQuizDivs.length;
+    let incorrectQuestions = [];
+
+    allQuizDivs.forEach((quizDiv, quizIndex) => {
+        const selectedAnswers = [];
+        const answerInputs = quizDiv.querySelectorAll('input');
+
+        answerInputs.forEach((input, answerIndex) => {
+            // if(answerIndex == 0)return;
+            if (input.checked) {
+                selectedAnswers.push(answerIndex);
+            }
+        });
+
+        let correct = false;
+        if (type1 === "Multiple Response") {
+            const correctAnswers = final_s[quizIndex+1].answers.filter(answer => answer.correct).map((answer, index) => index);
+            correct = correctAnswers.length === selectedAnswers.length && correctAnswers.every(index => selectedAnswers.includes(index));
+        } else {
+            const correctAnswerIndex = final_s[quizIndex+1].answers.findIndex(answer => answer.correct);
+            correct = selectedAnswers.length === 1 && selectedAnswers[0] === correctAnswerIndex;
+        }
+
+        if (correct) {
+            correctCount++;
+        } else {
+            incorrectQuestions.push(final_s[quizIndex]);
+        }
+    });
+
+    let resultString =''
+
+    const score = (correctCount / totalQuestions) * 10;
+    document.getElementById('score').textContent = score.toFixed(2);
+    
+    if (incorrectQuestions.length > 0) {
+        const retryMessage = `You got ${incorrectQuestions.length} question(s) wrong. Let's try those again!`;
+        alert(retryMessage);
+        console.log("run incorrect");
+        let arrayString = JSON.stringify(incorrectQuestions);
+        resultString = `"${arrayString}"`;
+        
+        let content;
+        const API_KEY = "AIzaSyAWEPC945637GjSgW6V0WFtwcoA4f4SmKs";
+        
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        
+        async function run2() {
+            document.getElementById('loading').innerHTML = `
+            <span>Loading...</span>
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+            `;
+            
+            // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+            const chat = model.startChat({
+                history: [
+                    {
+                        role: "user",
+                        parts: [{ text: "Dựa trên các thông tin sau đây, hãy viết một nhận xét về điểm cần cải thiện của học sinh. Hãy khuyến khích học sinh cải thiện điểm yếu của mình. Bài nhận xét nên dài ít nhất 500 từ. Dưới đây là danh sách các câu hỏi và câu trả lời sai của học sinh dưới dạng file JSON" }], 
+                    },    
+                    {
+                        role: "model",
+                        parts: [{ text: `Tôi sẽ nhận xét với tư cách là một giáo viên bộ môn và chỉ nhận xét đúng điểm cần cải thiện không nhận xét gì khác.
+                            Tôi sẽ:
+                            Nêu ra những điểm học sinh cần cải thiện.` }],
+                        },
+                    ],
+                    generationConfig : {
+                    temperature: 0.8,
+                    topP: 1,
+                    topK: 16,
+                },
+            });
+            
+            const msg = resultString;
+            
+            const result = await chat.sendMessage(msg);
+            const response = await result.response;
+            content = await response.text(); 
+            console.log(content);
+
+            postData(score,correctCount,totalQuestions,fileContent,content);
+            
+            
+            document.getElementById('loading').innerHTML = 'Done';
+            document.getElementById('result').innerHTML += `<div>${content}</div>`;
+                
+        }
+        
+
+        console.log(resultString);
+        renderQuiz(incorrectQuestions);
+        run2()
+        const text = "This is a test.";
+        
+    } else {
+        alert(`Your score is ${score.toFixed(2)} out of 10.`);
+    }
+ 
+}
+
+
+
+
+
+
 document.getElementById('get').addEventListener('click', get);
 
 document.getElementById('submit').addEventListener('click', run);
@@ -341,3 +505,7 @@ document.getElementById('submit').addEventListener('click', run);
 document.getElementById('pdf').addEventListener('click', readPDF);
 
 document.getElementById('word').addEventListener('click', readWord);
+
+document.getElementById('calculate-score').addEventListener('click', scoreQuiz);
+
+document.getElementById('history').addEventListener('click',urlChange)
