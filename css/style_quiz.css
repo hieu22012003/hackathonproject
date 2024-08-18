@@ -352,6 +352,8 @@ button:hover {
   position: relative;
   left: 100px;
 
+  top: 70% !important;
+
 }
 
 .loader span {

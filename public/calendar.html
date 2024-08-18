@@ -44,6 +44,91 @@
     <div class="iframe-container">
         <iframe class ="styled-iframe"src="https://calendar.google.com/calendar/embed?src=983a978063f9aacd543737417cd2eb31b8c8234c51712d0ff2a9735dad480d98%40group.calendar.google.com&ctz=Asia%2FHo_Chi_Minh" frameborder="0" scrolling="no"></iframe>
     </div>
+    
+    <div class="result-container" id="result-container"></div>
+
+    <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/0.1.0-beta.5/libs/oversea/index.js"></script>
+
+    <script>
+        new CozeWebSDK.WebChatClient({
+            config: {
+                bot_id: '7393345978566885384',
+            },
+            componentProps: {
+                title: 'Giáo Viên Hướng Dẫn',
+                icon: 'https://lf16-alice-tos-sign.oceanapi-i18n.com/obj/ocean-cloud-tos-sg/FileBizType.BIZ_BOT_ICON/7371847970293400592_1721397959060431159.jpeg?lk3s=50ccb0c5&x-expires=1722028007&x-signature=mTnfQ6I%2FVH%2Bdust5JeghcuLtCPw%3D'
+            },
+        });
+
+       const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('search-input');
+    const resultContainer = document.getElementById('result-container');
+
+const searchData = {
+    "gen ai": "Gen AI là viết tắt của trí tuệ nhân tạo...",
+    "machine learning": "Machine Learning là một nhánh của trí tuệ nhân tạo, tập trung vào việc học từ dữ liệu...",
+    "deep learning": "Deep Learning là một phần của Machine Learning, sử dụng các mạng neuron sâu để mô hình hóa dữ liệu phức tạp...",
+    "data science": "Data Science là một lĩnh vực liên ngành sử dụng các phương pháp, quy trình, thuật toán và hệ thống khoa học để trích xuất kiến thức và hiểu biết từ dữ liệu...",
+    "big data": "Big Data đề cập đến các tập dữ liệu lớn và phức tạp mà các công cụ xử lý dữ liệu truyền thống không thể xử lý được..."
+};
+
+function displayResult(query) {
+    const result = searchData[query.toLowerCase()];
+    if (result) {
+        resultContainer.innerHTML = result;
+        resultContainer.style.display = 'block';
+    } else {
+        resultContainer.innerHTML = "Không tìm thấy kết quả.";
+        resultContainer.style.display = 'block';
+    }
+}
+
+searchButton.addEventListener('click', () => {
+    const query = searchInput.value.trim();
+    if (query) {
+        displayResult(query);
+    }
+});
+
+searchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query) {
+            displayResult(query);
+        }
+    }
+});
+
+// Drag functionality
+resultContainer.onmousedown = function(event) {
+    resultContainer.style.position = 'absolute';
+    resultContainer.style.zIndex = 1000;
+
+    document.body.append(resultContainer);
+
+    function moveAt(pageX, pageY) {
+        resultContainer.style.left = pageX - resultContainer.offsetWidth / 2 + 'px';
+        resultContainer.style.top = pageY - resultContainer.offsetHeight / 2 + 'px';
+    }
+
+    moveAt(event.pageX, event.pageY);
+
+    function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+
+    resultContainer.onmouseup = function() {
+        document.removeEventListener('mousemove', onMouseMove);
+        resultContainer.onmouseup = null;
+    };
+};
+
+resultContainer.ondragstart = function() {
+    return false;
+};
+    </script>
 
 </body>
 </html>

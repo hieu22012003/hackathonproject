@@ -168,8 +168,6 @@ var text_0 = '';
     }
 
 
-
-
     function renderQuiz(quizData) {
         const type1 = document.getElementById('question-type').value;
         const container = document.getElementById('quiz-container');
@@ -492,6 +490,7 @@ function scoreQuiz() {
         
     } else {
         alert(`Your score is ${score.toFixed(2)} out of 10.`);
+        postData(score,correctCount,totalQuestions,userQues,"");
     }
     
 }
