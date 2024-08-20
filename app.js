@@ -24,7 +24,7 @@ app.get(['/','/index.html'],(req,res) => {
     res.sendFile(path.join(__dirname,'public','index.html'));
 })
 
-const htmlFiles = ['/quiz.html','/pomodoro.html','/File_Upload.html','/history.html'];
+const htmlFiles = ['/quiz.html','/pomodoro.html','/File_Upload.html','/history.html','/calendar.html'];
 htmlFiles.forEach((item) => {
     app.get(item,(req,res) => {
         res.sendFile(path.join(__dirname,'public',item.substring(1)));
@@ -118,8 +118,6 @@ app.get('/history.html/:id',async(req,res) => {
    const responseData = await findDataId(id);
    res.status(200).send(responseData)
 })
-
-
 
 
 app.get('*', (req,res) => {

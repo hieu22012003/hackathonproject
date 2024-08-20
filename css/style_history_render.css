@@ -1,0 +1,309 @@
+/* navbar */
+
+.container{
+    width: 90%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar{
+    margin-top: 20px;
+    gap: 20px;
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+}
+.navbar img{
+    border-radius: 10px;    
+}
+
+.navbar .logo {
+    display: flex;
+    align-items: center;
+}
+.navbar .logo span {
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 10px;
+    color: #e09123;
+}
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.navbar ul li {
+    margin: 0 15px;
+    transition: background-color 0.3s ease;
+}
+.navbar ul li:hover {
+    background-color: #e0e0e0;
+}
+.navbar ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 15px;
+    display: block;
+}
+.navbar ul li .material-icons {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+.navbar .search-bar {
+    flex-grow: 1;
+    margin: 0 20px;
+}
+.navbar .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+.navbar .login-buttons {
+    display: flex;
+    align-items: center;
+}
+.navbar .login-buttons a {
+    margin-left: 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border-radius: 5px;
+}
+
+
+/* body */
+
+.article{
+    text-align: center;
+}
+
+.article h1{
+    color:#77E4C8;
+    font-style: italic;
+    font-size: 50px;
+    font-weight: bold;
+    text-shadow: -2px 2px 4px  #b9ef1580;
+    font-family: "Be Vietnam Pro";
+}
+
+/* article */
+
+.header-article{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* history */
+.history{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Cabin;
+    border: 2px solid #478CCFC4;
+    box-shadow: 0px 4px 10px #36C2CE6B;
+    padding: 0 20px 30px 20px;
+    border-radius: 25px;
+}   
+
+
+
+
+
+/* left */
+.left{
+    display: flex;
+    font-size: 28px;
+    font-family: Cabin;
+    gap: 80px;
+    align-items: center;
+    font-style: italic;
+}
+
+.left h3:nth-child(2){
+    padding: 5px 30px 5px 30px;
+    background: #364DCE;
+    border-radius: 10px;
+    color: white;
+}
+
+
+
+
+
+/* right */
+.right{
+    display: flex;
+    font-size: 20px;
+    font-family: Cabin;
+    gap: 60px;
+}
+
+.correct p,
+.wrong p,
+.total p{
+    margin:0;
+}
+
+.correct,
+.wrong,
+.total {
+    padding: 10px 30px 10px 30px;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.correct p:nth-child(1),
+.wrong p:nth-child(1),
+.total p:nth-child(1){
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.wrong{
+    padding: 10px 40px 10px 40px;
+    border: 2px solid #C13537C4;
+    background: #C135370D;
+
+}
+
+.total{
+    padding: 10px 37px 10px 37px;
+    border: 2px solid #4535C1C4;
+    background: #4535C10D;
+
+}
+
+.correct{
+    border: 2px solid #53C135C4;
+    background: #53C1350D;
+
+}
+
+.correct p:nth-child(2){
+    font-family: Cabin;
+    font-weight: 700;
+    color: #28843F;
+
+}
+
+.wrong p:nth-child(2){
+    color: #842828;
+    font-weight: 600;
+}
+
+.total p:nth-child(2){
+    color: #283084;
+    font-weight: 600;
+}
+
+/* Question */
+.Questions{
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* query */
+.query{
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px 25px 20px;
+    margin-top: 25px;
+}
+
+
+
+
+/* top */
+.top{
+    display: flex;
+    justify-content: space-between;
+    font-size: 23px;
+    font-family: Cabin;
+    font-style: italic;
+    font-weight: 600;
+    align-items: center;
+}
+
+.notcorrect{
+    font-weight: 500;
+    background: #C13537;
+    padding: 8px 25px 8px 25px;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+}
+
+.correctword{
+    font-weight: 500;
+    background: #28843F;
+    padding: 8px 55px 8px 55px;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+}
+
+/* Choice */
+.choice{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 18px;
+    width: 93%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.choice p{
+    margin: 0;
+}
+
+.choice div{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.choice div div{
+    width: 18px;
+    height: 18px;
+    border-radius: 20px;
+    border: 1px solid black;
+}
+
+
+
+/* choices background */
+.wrong-choice{
+    background: #C13537;
+}
+
+.correct-choice{
+    background: #53C135C4;
+
+}
+
+/* border */
+.wrong-border{
+    border: 2px solid #C13537;
+    border-radius: 10px;
+}
+
+.correct-border{
+    border: 2px solid #28843F;
+    border-radius: 10px;
+}
