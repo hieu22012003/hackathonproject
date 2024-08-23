@@ -199,6 +199,26 @@ const loopQueries = (res) => {
 
 
 
+
+
+
+
+
+
+
+// render feed back
+const renderFeedBack = (res) => {
+    const fb = res.AI_Res;
+    console.log(fb)
+}
+
+
+
+
+
+
+
+
 // getId Data
 const getIdData = async() => {
     const url = window.location.href + "/singleid"
@@ -209,10 +229,15 @@ const getIdData = async() => {
     
     const [resJson] = await res.json();
     console.log(resJson)
+
     renderHeader(resJson);
     loopQueries(resJson);
+    renderFeedBack(resJson)
 }
 
- 
+
+
+
+
 getIdData()
 // loopQueries();

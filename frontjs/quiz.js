@@ -451,7 +451,14 @@ function scoreQuiz() {
                         parts: [{ text: `Tôi sẽ nhận xét với tư cách là một giáo viên bộ môn và chỉ nhận xét đúng điểm cần cải thiện không nhận xét gì khác.
                             Tôi sẽ:
                             1. Nêu ra những điểm học sinh cần cải thiện.
-                            2. Đưa ra lời khuyên dành cho học sinh` }],
+                            2. Đưa ra lời khuyên dành cho học sinh
+                            3. theo cú pháp sau đây:
+                            * Nhận xét bài làm:
+                            gì đó đó
+                            * Điểm cần cải thiện 1: điểm cần cải thiện
+                            * Điểm cần cải thiện 2: điểm cần cải thiện
+                            * điểm cần cải thiện 3: điểm cần cải thiện
+                            * Lời khuyền: đưa ra lời khuyên` }],
                         },
                     ],
                     generationConfig : {
