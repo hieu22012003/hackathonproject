@@ -12,11 +12,13 @@ const conn = mysql.createPool({
 }).promise()
 
 
+// create user
 const createUser = async(username,password,email) => {
     await conn.query(`INSERT INTO people(Username,Pass,Email) 
         VALUES(?,?,?)`,[username,password,email]);
 }
 
+// find id user
 const findUser = async(username,password) => {
     const [res] = await conn.query(`SELECT * FROM people
         WHERE Username = ? && Pass = ?`,[username,password])
@@ -24,17 +26,20 @@ const findUser = async(username,password) => {
     return res[0].PersonId; 
 }
 
+// find user data
 const findUserData = async(id) => {
     const [res] = await conn.query(`SELECT * FROM userData
         WHERE PersonId = ?`,[id])
     return res;
 }
 
-const addNewData = async(PersonId,User_Data,Score,Number_Of_Question,Correct_Questions,User_Question,AI_res) => {
-    await conn.query(`INSERT INTO userData (PersonID,User_Data,Score,Number_Of_Question,Correct_Questions,User_Question,AI_Res)
-        VALUES(?,?,?,?,?,?,?)`,[PersonId,User_Data,Score,Number_Of_Question,Correct_Questions,User_Question,AI_res]);
+// add new data
+const addNewData = async(PersonId,User_Data,Score,Number_Of_Question,Correct_Questions,User_Question,AI_res,trueFalse) => {
+    await conn.query(`INSERT INTO userData (PersonID,User_Data,Score,Number_Of_Question,Correct_Questions,User_Question,AI_Res,True_False)
+        VALUES(?,?,?,?,?,?,?,?)`,[PersonId,User_Data,Score,Number_Of_Question,Correct_Questions,User_Question,AI_res,trueFalse]);
 }
 
+// find data via id
 const findDataId = async(id) => {
     const [res] = await conn.query(`SELECT * FROM userData
         WHERE DataId = ?`,[id]);

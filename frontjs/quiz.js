@@ -125,7 +125,7 @@ async function run() {
     }        
 
 
-    async function postData(score,correctQuestion,totalQuestions,userQues,content){
+    async function postData(score,correctQuestion,totalQuestions,userQues,content,trueFalse){
         const url = "http://localhost:5500/quiz.html";
         const res = await fetch(url,{
             method: 'POST',
@@ -145,7 +145,8 @@ async function run() {
                     User_Correct: correctQuestion,
                     User_Total: totalQuestions,
                     User_Questions: userQues,
-                    AI_res: content
+                    AI_res: content,
+                    True_False: trueFalse
                 }
             })
         })
@@ -371,6 +372,7 @@ function cleanJsonString(json) {
 }
 
 function scoreQuiz() {
+    let correctAndWrong = [];
     if (!final_s || final_s.length === 0) {
         alert("Please generate the quiz first!");
         return;
@@ -389,7 +391,7 @@ function scoreQuiz() {
         answerInputs.forEach((input, answerIndex) => {
             // if(answerIndex == 0)return;
             if (input.checked) {
-                selectedAnswers.push(answerIndex);
+                selectedAnswers.push(answerIndex);  
             }
         });
 
@@ -404,8 +406,10 @@ function scoreQuiz() {
 
         if (correct) {
             correctCount++;
+            correctAndWrong.push(`{"true": ${selectedAnswers[0]+1}}`)
         } else {
             incorrectQuestions.push(final_s[quizIndex]);
+            correctAndWrong.push(`{"false": ${selectedAnswers[0]+1}}`)
         }
     });
 
@@ -465,7 +469,7 @@ function scoreQuiz() {
             // content = content.replaceAll('*','');
             console.log(content);
 
-            postData(score,correctCount,totalQuestions,userQues,content);
+            postData(score,correctCount,totalQuestions,userQues,content,correctAndWrong);
             
             
             document.getElementById('loading').innerHTML = 'Done';
@@ -481,7 +485,7 @@ function scoreQuiz() {
         
     } else {
         alert(`Your score is ${score.toFixed(2)} out of 10.`);
-        postData(score,correctCount,totalQuestions,userQues,"");
+        postData(score,correctCount,totalQuestions,userQues,"",correctAndWrong);
     }
     
 }

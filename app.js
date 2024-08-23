@@ -48,6 +48,7 @@ app.post('/quiz.html',async (req,res) => {
     const score = userReqBack.User_Score;
     const userQues = userReqBack.User_Questions;
     const AI_Res = userReqBack.AI_res;
+    const trueFalse = userReqBack.True_False;
 
 
     console.log(userReqBack);
@@ -60,10 +61,12 @@ app.post('/quiz.html',async (req,res) => {
         await createUser(username,password,email);
         checkUser = await findUser(username,password);
 
-        addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns,userQues,AI_Res)
+        addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns,userQues,AI_Res,trueFalse.toString())
 
     }else{
-        addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns,userQues,AI_Res)
+
+        // add new databases
+        addNewData(checkUser,JSON.stringify(userData),score,totalQues,correctAns,userQues,AI_Res,trueFalse.toString())
     }
 
 })
