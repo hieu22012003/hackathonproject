@@ -37,25 +37,25 @@ async function run() {
     userQues = document.getElementById('prompt').value;
     let pre_prompt = [
     
-        `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có dựa theo nội dung hoặc chủ đề là: ${document.getElementById('prompt').value}. Trong 4 đáp án của từng câu, chỉ có 1 đáp án true và 3 đáp án false. Đáp án true là ngẫu nhiên trong 4 đáp án 1, 2, 3, 4. Cấu trúc nó sẽ nên như này (và chỉ promt ra nội dung câu hỏi dựa theo cấu trúc, ko nên thêm bất cứ thông tin nào khác, không thêm lưu ý, không thêm tiêu đề):
+        `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu và sắp xếp thự tự các "answer" ngẫu nhiên, có dựa theo nội dung hoặc chủ đề là: ${document.getElementById('prompt').value}. Trong 4 đáp án của từng câu, chỉ có 1 đáp án true và 3 đáp án false. Đáp án true là ngẫu nhiên trong 4 đáp án 1, 2, 3, 4. Cấu trúc nó sẽ nên như này (và chỉ promt ra nội dung câu hỏi dựa theo cấu trúc, ko nên thêm bất cứ thông tin nào khác, không thêm lưu ý, không thêm tiêu đề) ghi rõ là "Lớp mấy" ví dụ (Lớp 11):
         [
-            {"subject":"môn học",class : "lớp mấy"},
+            {"subject":"môn học",class : "Lớp bao nhiêu"},
             { "question": "", "answers": [ { "text": "Đáp án 1", "correct": true or false }, { "text": "Đáp án 2", "correct": true or false }, { "text": "Đáp án 3", "correct": true or false }, { "text": "Đáp án 4", "correct": true or false } ] },
             { "question": "", "answers": [ { "text": "Đáp án 1", "correct": true or false }, { "text": "Đáp án 2", "correct": true or false }, { "text": "Đáp án 3", "correct": true or false }, { "text": "Đáp án 4", "correct": true or false } ] },
             { "question": "", "answers": [ { "text": "Đáp án 1", "correct": true or false }, { "text": "Đáp án 2", "correct": true or false }, { "text": "Đáp án 3", "correct": true or false }, { "text": "Đáp án 4", "correct": true or false } ] },
         ]; `,
 
-        `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, có dựa theo nội dung hoặc chủ đề là: ${document.getElementById('prompt').value}. Trong 4 đáp án của từng câu, có ít nhất 1 đáp án sai và ít nhất 2 đáp án đúng. Đáp án đúng sẽ được sắp xếp ngẫu nhiên trong 4 đáp án. Cấu trúc câu hỏi như sau (chỉ in ra nội dung câu hỏi theo cấu trúc này, không thêm bất cứ thông tin nào khác, không thêm lưu ý, không thêm tiêu đề):
+        `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câuvà sắp xếp thự tự các "answer" ngẫu nhiên, dựa theo nội dung hoặc chủ đề là: ${document.getElementById('prompt').value}. Trong 4 đáp án của từng câu, có ít nhất 1 đáp án sai và ít nhất 2 đáp án đúng. Đáp án đúng sẽ được sắp xếp ngẫu nhiên trong 4 đáp án. Cấu trúc câu hỏi như sau (chỉ in ra nội dung câu hỏi theo cấu trúc này, không thêm bất cứ thông tin nào khác, không thêm lưu ý, không thêm tiêu đề) ghi rõ là "Lớp mấy" ví dụ (Lớp 11):
         [
-            {"subject":"môn học",class : "lớp mấy"},
+            {"subject":"môn học",class : "Lớp bao nhiêu"},
             { "question": "Câu hỏi 1", "answers": [ { "text": "Đáp án 1", "correct": true or false }, { "text": "Đáp án 2", "correct": true or false }, { "text": "Đáp án 3", "correct": true or false }, { "text": "Đáp án 4", "correct": true or false } ] },
             { "question": "Câu hỏi 2", "answers": [ { "text": "Đáp án 1", "correct": true or false }, { "text": "Đáp án 2", "correct": true or false }, { "text": "Đáp án 3", "correct": true or false }, { "text": "Đáp án 4", "correct": true or false } ] },
             { "question": "Câu hỏi 3", "answers": [ { "text": "Đáp án 1", "correct": true or false }, { "text": "Đáp án 2", "correct": true or false }, { "text": "Đáp án 3", "correct": true or false }, { "text": "Đáp án 4", "correct": true or false } ] }
         ];`,
 
-        `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu, dựa trên nội dung hoặc chủ đề là: ${document.getElementById('prompt').value}. Mỗi câu có ít nhất 1 đáp án sai và ít nhất 2 đáp án đúng, được phân bố ngẫu nhiên trong 4 đáp án. Cấu trúc dữ liệu như sau (chỉ xuất nội dung câu hỏi theo cấu trúc này, không thêm thông tin khác):
+        `Tạo ra chính xác ${numQuestions} câu hỏi quiz với 4 đáp án khả thi mỗi câu và sắp xếp thự tự các "answer" ngẫu nhiên, dựa trên nội dung hoặc chủ đề là: ${document.getElementById('prompt').value}. Mỗi câu có ít nhất 1 đáp án sai và ít nhất 2 đáp án đúng, được phân bố ngẫu nhiên trong 4 đáp án. Cấu trúc dữ liệu như sau (chỉ xuất nội dung câu hỏi theo cấu trúc này, không thêm thông tin khác) ghi rõ là "Lớp mấy" ví dụ (Lớp 11):
         [
-            {"subject":"môn học",class : "lớp mấy"},
+            {"subject":"môn học",class : "Lớp bao nhiêu"},
             { "question": "Câu hỏi 1", "answers": [ { "text": "Đáp án 1", "correct": true or false }, { "text": "Đáp án 2", "correct": true or false }, { "text": "Đáp án 3", "correct": true or false }, { "text": "Đáp án 4", "correct": true or false } ] },
             { "question": "Câu hỏi 2", "answers": [ { "text": "Đáp án 1", "correct": true or false }, { "text": "Đáp án 2", "correct": true or false }, { "text": "Đáp án 3", "correct": true or false }, { "text": "Đáp án 4", "correct": true or false } ] },
             { "question": "Câu hỏi 3", "answers": [ { "text": "Đáp án 1", "correct": true or false }, { "text": "Đáp án 2", "correct": true or false }, { "text": "Đáp án 3", "correct": true or false }, { "text": "Đáp án 4", "correct": true or false } ] }
@@ -446,7 +446,8 @@ function scoreQuiz() {
                         role: "model",
                         parts: [{ text: `Tôi sẽ nhận xét với tư cách là một giáo viên bộ môn và chỉ nhận xét đúng điểm cần cải thiện không nhận xét gì khác.
                             Tôi sẽ:
-                            Nêu ra những điểm học sinh cần cải thiện.` }],
+                            1. Nêu ra những điểm học sinh cần cải thiện.
+                            2. Đưa ra lời khuyên dành cho học sinh` }],
                         },
                     ],
                     generationConfig : {
@@ -461,6 +462,7 @@ function scoreQuiz() {
             const result = await chat.sendMessage(msg);
             const response = await result.response;
             content = await response.text(); 
+            // content = content.replaceAll('*','');
             console.log(content);
 
             postData(score,correctCount,totalQuestions,userQues,content);

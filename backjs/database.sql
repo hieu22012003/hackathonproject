@@ -16,5 +16,6 @@ CREATE TABLE userData(
     Number_Of_Question int,
     Correct_Questions int,
     User_Question text,
-    AI_Res text
+    AI_Res text,
+    True_False text
 )

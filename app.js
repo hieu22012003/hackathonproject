@@ -112,12 +112,19 @@ app.get('/history',async (req,res) => {
 
 
 
-//get single history id
 app.get('/history.html/:id',async(req,res) => {
-   const id = req.params.id
-   const responseData = await findDataId(id);
-   res.status(200).send(responseData)
+    res.status(200).sendFile(path.join(__dirname,'public','history_render.html'))
+    
 })
+
+
+//get single history id
+app.get('/history.html/:id/singleid', async(req,res) => {
+    const id = req.params.id
+    const data = await findDataId(id);
+    res.status(200).send(data)
+})
+
 
 
 app.get('*', (req,res) => {
